@@ -45,16 +45,27 @@ public class AetasFerreaMod {
 
         net.minecraftforge.fml.ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, AetasFerreaConfig.SPEC);
 
-        if (!net.minecraftforge.fml.ModList.get().isLoaded("configured") && !net.minecraftforge.fml.ModList.get().isLoaded("yet_another_config_lib_v3")) {
-            net.minecraftforge.fml.ModLoadingContext.get().registerExtensionPoint(net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory.class,
-                () -> new net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory((minecraft, screen) -> {
-                    return new com.aetasferrea.aetasferreamod.client.FallbackConfigScreen(screen);
-                })
-            );
+        if (net.minecraftforge.fml.loading.FMLEnvironment.dist.isClient()) {
+            if (!net.minecraftforge.fml.ModList.get().isLoaded("configured") && !net.minecraftforge.fml.ModList.get().isLoaded("yet_another_config_lib_v3")) {
+                ClientHelper.registerConfigScreen();
+            }
         }
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
         LOGGER.info("AetasFerreaMod common setup complete");
     }
+
+    // ---------- CLIENT-ONLY REF ISOLATION
+    private static class ClientHelper {
+        private static void registerConfigScreen() {
+            net.minecraftforge.fml.ModLoadingContext.get().registerExtensionPoint(
+                net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory.class,
+                () -> new net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory((minecraft, screen) -> {
+                    return new com.aetasferrea.aetasferreamod.client.FallbackConfigScreen(screen);
+                })
+            );
+        }
+    }
 }
+
