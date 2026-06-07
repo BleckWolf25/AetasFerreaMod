@@ -1,0 +1,18 @@
+================================================================================
+ Aetas Ferrea Mod - Changelog
+================================================================================
+
+Version 1.0.0
+=============
+- Initial Release of Aetas Ferrea.
+- Added Golden Dulling: Golden weapons and tools dynamically lose attack damage, attack speed, and block break speed as durability drops.
+- Added Golden Enchantments: Golden items automatically receive Looting II, Fortune II, or Protection II when crafted, picked up, or spawned.
+- Added Hero of the Village passive effect when wearing a full set of Golden armor.
+- Implemented the Armor Realism Matrix:
+  - Slashing damage immunities for Iron and Diamond armor sets.
+  - Arrow deflection chance for Iron (up to 20%) and Diamond (up to 60%) armor.
+  - Blunt/High-Mass weapon bypass logic for Chainmail and Iron armor.
+  - Durability immunities: armors do not lose durability when hit by lower-tier weapons.
+- Added Leather Armor speed boost: grants +1.25% movement speed per piece (up to +5% max).
+- Configured dynamic config resolution: yields Config GUI rendering to 'Configured' or 'YACL' if present, with a manual edit helper fallback GUI.
+- Added full support for mobs wearing realism-based armors and using golden gear.

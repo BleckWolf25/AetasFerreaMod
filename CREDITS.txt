@@ -1,0 +1,19 @@
+================================================================================
+ Aetas Ferrea Mod - Credits & Attributions
+================================================================================
+
+Development & Design
+==============================
+- Lead Developer: Bleckwolf25
+- Mod Architecture: Bleckwolf25
+
+Special Thanks & Libraries
+==============================
+- Minecraft Forge Team: For providing the modding framework and template.
+- Configured / YACL (Yet Another Config Lib): For the configuration screen bindings.
+- Minecraft Coder Pack (MCP) / Mojang: For the mappings and game assets.
+
+License
+==============================
+This mod is open-source and distributed under the MIT License.
+See LICENSE.txt for more details.
