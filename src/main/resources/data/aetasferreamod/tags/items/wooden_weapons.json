@@ -5,6 +5,16 @@
     "minecraft:wooden_axe",
     "minecraft:wooden_pickaxe",
     "minecraft:wooden_shovel",
-    "minecraft:wooden_hoe"
+    "minecraft:wooden_hoe",
+    { "id": "spartanweaponry:wooden_dagger", "required": false },
+    { "id": "spartanweaponry:wooden_parrying_dagger", "required": false },
+    { "id": "spartanweaponry:wooden_longsword", "required": false },
+    { "id": "spartanweaponry:wooden_greatsword", "required": false },
+    { "id": "spartanweaponry:wooden_warhammer", "required": false },
+    { "id": "spartanweaponry:wooden_halberd", "required": false },
+    { "id": "spartanweaponry:wooden_pike", "required": false },
+    { "id": "spartanweaponry:wooden_lance", "required": false },
+    { "id": "spartanweaponry:wooden_battleaxe", "required": false },
+    { "id": "spartanweaponry:wooden_flanged_mace", "required": false }
   ]
 }

@@ -74,6 +74,10 @@ minecraft {
             // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
             property 'forge.logging.console.level', 'debug'
 
+            // Mixin refmap remapping for dependencies (like Jade)
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+
             mods {
                 "${mod_id}" {
                     source sourceSets.main
@@ -114,6 +118,12 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 repositories {
     // Put repositories for dependencies here
     // ForgeGradle automatically adds the Forge maven and Maven Central for you
+    maven {
+        url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
 }
 
 dependencies {
@@ -123,6 +133,25 @@ dependencies {
     // If the group id is "net.minecraft" and the artifact id is one of ["client", "server", "joined"],
     // then special handling is done to allow a setup of a vanilla dependency without the use of an external repository.
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+    // Jade Integration
+    implementation fg.deobf("curse.maven:jade-324717:5390389")
+
+    // Farmer's Delight
+    implementation fg.deobf("curse.maven:farmers-delight-398521:7801523")
+
+    // Spartan Weaponry
+    implementation fg.deobf("curse.maven:spartan-weaponry-278141:6842571")
+
+    // Enhanced AI
+    compileOnly fg.deobf("curse.maven:enhanced-ai-515276:7360784")
+    
+    // Combat Roll
+    compileOnly fg.deobf("curse.maven:combat-roll-678036:5625925")
+    
+    // Better Combat
+    compileOnly fg.deobf("curse.maven:better-combat-639842:4685418")
+    // ----------------------------------
 
     // Example mod dependency with JEI - using fg.deobf() ensures the dependency is remapped to your development mappings
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
