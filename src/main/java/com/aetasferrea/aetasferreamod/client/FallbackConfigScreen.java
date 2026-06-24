@@ -31,11 +31,11 @@ public class FallbackConfigScreen extends Screen {
     private final Screen parent;
 
     // Cache components to prevent continuous memory allocation during the render loop
-    private static final Component TITLE_TEXT = Component.literal("Aetas Ferrea Configuration");
-    private static final Component LINE_1 = Component.literal("Vanilla Forge does not provide a native config GUI.");
-    private static final Component LINE_2 = Component.literal("To edit these values in-game, please install 'Configured' or 'YACL'.");
-    private static final Component LINE_3 = Component.literal("Otherwise, edit 'aetasferreamod-common.toml' in your config folder.");
-    private static final Component BTN_BACK = Component.literal("Back");
+    private static final Component TITLE_TEXT = Component.translatable("gui.aetasferreamod.config.title");
+    private static final Component LINE_1 = Component.translatable("gui.aetasferreamod.config.line1");
+    private static final Component LINE_2 = Component.translatable("gui.aetasferreamod.config.line2");
+    private static final Component LINE_3 = Component.translatable("gui.aetasferreamod.config.line3");
+    private static final Component BTN_BACK = Component.translatable("gui.aetasferreamod.config.back");
 
     // ---------- CONSTRUCTOR
     public FallbackConfigScreen(Screen parent) {

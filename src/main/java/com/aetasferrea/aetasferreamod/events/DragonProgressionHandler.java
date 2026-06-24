@@ -34,8 +34,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class DragonProgressionHandler {
 
     // Cache the heavy objects so they are only instantiated once when the mod loads
-    private static final ResourceLocation END_DRAGON_ADVANCEMENT = new ResourceLocation("minecraft", "end/kill_dragon");
-    private static final Component WARNING_MESSAGE = Component.literal("§cYou lack the dragon-slaying experience to forge this legendary equipment.");
+    private static final ResourceLocation END_DRAGON_ADVANCEMENT = ResourceLocation.fromNamespaceAndPath("minecraft", "end/kill_dragon");
+    private static final Component WARNING_MESSAGE = Component.translatable("message.aetasferreamod.dragon.lack_experience").withStyle(net.minecraft.ChatFormatting.RED);
 
     // ---------- TICK EVENT HANDLER (SMITHING BLOCKER)
     @SubscribeEvent

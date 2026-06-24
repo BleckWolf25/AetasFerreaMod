@@ -22,8 +22,15 @@ import com.aetasferrea.aetasferreamod.AetasFerreaMod;
 import snownee.jade.api.IWailaPlugin;
 import snownee.jade.api.WailaPlugin;
 
+import snownee.jade.api.IWailaClientRegistration;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
+
 // ---------- CLASS
 @WailaPlugin(AetasFerreaMod.MODID)
 public class JadePlugin implements IWailaPlugin {
 
+    @Override
+    public void registerClient(IWailaClientRegistration registration) {
+        registration.registerEntityComponent(EquineComponentProvider.INSTANCE, AbstractHorse.class);
+    }
 }

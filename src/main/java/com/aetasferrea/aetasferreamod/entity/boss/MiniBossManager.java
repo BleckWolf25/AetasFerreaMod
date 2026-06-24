@@ -132,7 +132,7 @@ public class MiniBossManager {
                 skeleton.moveTo(spawnPos.getX() + 0.5D, spawnPos.getY(), spawnPos.getZ() + 0.5D, level.random.nextFloat() * 360F, 0.0F);
                 makeCatenaVigil(skeleton, level);
                 level.addFreshEntity(skeleton);
-                if (targetPlayer != null) targetPlayer.sendSystemMessage(net.minecraft.network.chat.Component.literal("§cAn ominous presence approaches... The Catena-Mail Vigil has arrived.§r"));
+                if (targetPlayer != null) targetPlayer.sendSystemMessage(net.minecraft.network.chat.Component.translatable("message.aetasferreamod.boss.spawn_vigil").withStyle(net.minecraft.ChatFormatting.RED));
                 return true;
             }
         } else if (bossType.equals("castellan")) {
@@ -141,7 +141,7 @@ public class MiniBossManager {
                 husk.moveTo(spawnPos.getX() + 0.5D, spawnPos.getY(), spawnPos.getZ() + 0.5D, level.random.nextFloat() * 360F, 0.0F);
                 makeDefiledCastellan(husk, level);
                 level.addFreshEntity(husk);
-                if (targetPlayer != null) targetPlayer.sendSystemMessage(net.minecraft.network.chat.Component.literal("§cThe ground shakes... The Defiled Castellan has risen.§r"));
+                if (targetPlayer != null) targetPlayer.sendSystemMessage(net.minecraft.network.chat.Component.translatable("message.aetasferreamod.boss.spawn_castellan").withStyle(net.minecraft.ChatFormatting.RED));
                 return true;
             }
         } else if (bossType.equals("knight_unenchanted")) {
@@ -150,7 +150,7 @@ public class MiniBossManager {
                 husk.moveTo(spawnPos.getX() + 0.5D, spawnPos.getY(), spawnPos.getZ() + 0.5D, level.random.nextFloat() * 360F, 0.0F);
                 makeDeadIronKnight(husk, level, false);
                 level.addFreshEntity(husk);
-                if (targetPlayer != null) targetPlayer.sendSystemMessage(net.minecraft.network.chat.Component.literal("§cFortifications breached! The Dead Iron Knight is here.§r"));
+                if (targetPlayer != null) targetPlayer.sendSystemMessage(net.minecraft.network.chat.Component.translatable("message.aetasferreamod.boss.spawn_iron_knight").withStyle(net.minecraft.ChatFormatting.RED));
                 return true;
             }
         } else if (bossType.equals("knight")) {
@@ -159,7 +159,7 @@ public class MiniBossManager {
                 husk.moveTo(spawnPos.getX() + 0.5D, spawnPos.getY(), spawnPos.getZ() + 0.5D, level.random.nextFloat() * 360F, 0.0F);
                 makeDeadIronKnight(husk, level, true);
                 level.addFreshEntity(husk);
-                if (targetPlayer != null) targetPlayer.sendSystemMessage(net.minecraft.network.chat.Component.literal("§cFortifications breached! The Dead Iron Knight is here.§r"));
+                if (targetPlayer != null) targetPlayer.sendSystemMessage(net.minecraft.network.chat.Component.translatable("message.aetasferreamod.boss.spawn_iron_knight").withStyle(net.minecraft.ChatFormatting.RED));
                 return true;
             }
         } else if (bossType.equals("diamond_knight")) {
@@ -168,7 +168,7 @@ public class MiniBossManager {
                 husk.moveTo(spawnPos.getX() + 0.5D, spawnPos.getY(), spawnPos.getZ() + 0.5D, level.random.nextFloat() * 360F, 0.0F);
                 makeDiamondKnight(husk, level);
                 level.addFreshEntity(husk);
-                if (targetPlayer != null) targetPlayer.sendSystemMessage(net.minecraft.network.chat.Component.literal("§bA legendary foe emerges... The Diamond Knight stands before you.§r"));
+                if (targetPlayer != null) targetPlayer.sendSystemMessage(net.minecraft.network.chat.Component.translatable("message.aetasferreamod.boss.spawn_diamond_knight").withStyle(net.minecraft.ChatFormatting.AQUA));
                 return true;
             }
         } else if (bossType.equals("both_vigil_castellan")) {
@@ -186,7 +186,7 @@ public class MiniBossManager {
                 makeDefiledCastellan(husk, level);
                 level.addFreshEntity(husk);
 
-                if (targetPlayer != null) targetPlayer.sendSystemMessage(net.minecraft.network.chat.Component.literal("§cDouble threat! The Catena-Mail Vigil and The Defiled Castellan are hunting you!§r"));
+                if (targetPlayer != null) targetPlayer.sendSystemMessage(net.minecraft.network.chat.Component.translatable("message.aetasferreamod.boss.spawn_double").withStyle(net.minecraft.ChatFormatting.RED));
                 return true;
             }
         } else if (bossType.equals("knight_enchanted_and_double")) {
@@ -212,7 +212,7 @@ public class MiniBossManager {
                 makeDefiledCastellan(castellan, level);
                 level.addFreshEntity(castellan);
 
-                if (targetPlayer != null) targetPlayer.sendSystemMessage(net.minecraft.network.chat.Component.literal("§cTriple threat! The Dead Iron Knight, The Vigil, and The Castellan have all spawned!§r"));
+                if (targetPlayer != null) targetPlayer.sendSystemMessage(net.minecraft.network.chat.Component.translatable("message.aetasferreamod.boss.spawn_triple").withStyle(net.minecraft.ChatFormatting.RED));
                 return true;
             }
         }
@@ -249,7 +249,7 @@ public class MiniBossManager {
     private static void makeCatenaVigil(Skeleton skeleton, Level level) {
         skeleton.setPersistenceRequired();
         skeleton.getPersistentData().putBoolean("IsCatenaVigil", true);
-        skeleton.setCustomName(net.minecraft.network.chat.Component.literal("The Catena-Mail Vigil"));
+        skeleton.setCustomName(net.minecraft.network.chat.Component.translatable("entity.aetasferreamod.boss.vigil"));
         
         // 60 HP (30 hearts) and high target acquisition range (128 blocks)
         safeSetAttribute(skeleton, Attributes.MAX_HEALTH, 60.0D);
@@ -282,7 +282,7 @@ public class MiniBossManager {
     private static void makeDefiledCastellan(Zombie husk, Level level) {
         husk.setPersistenceRequired();
         husk.getPersistentData().putBoolean("IsDefiledCastellan", true);
-        husk.setCustomName(net.minecraft.network.chat.Component.literal("The Defiled Castellan"));
+        husk.setCustomName(net.minecraft.network.chat.Component.translatable("entity.aetasferreamod.boss.castellan"));
         
         // 80 HP (40 hearts), 50% knockback resistance, and high follow range (128 blocks)
         safeSetAttribute(husk, Attributes.MAX_HEALTH, 80.0D);
@@ -309,7 +309,7 @@ public class MiniBossManager {
     private static void makeDeadIronKnight(Zombie husk, Level level, boolean enchanted) {
         husk.setPersistenceRequired();
         husk.getPersistentData().putBoolean("IsDeadIronKnight", true);
-        husk.setCustomName(net.minecraft.network.chat.Component.literal("The Dead Iron Knight"));
+        husk.setCustomName(net.minecraft.network.chat.Component.translatable("entity.aetasferreamod.boss.iron_knight"));
         
         // 100 HP (50 hearts), high follow range (128 blocks), and 10% faster movement speed
         safeSetAttribute(husk, Attributes.MAX_HEALTH, 100.0D);
@@ -363,7 +363,7 @@ public class MiniBossManager {
     private static void makeDiamondKnight(Zombie husk, Level level) {
         husk.setPersistenceRequired();
         husk.getPersistentData().putBoolean("IsDiamondKnight", true);
-        husk.setCustomName(net.minecraft.network.chat.Component.literal("The Diamond Knight"));
+        husk.setCustomName(net.minecraft.network.chat.Component.translatable("entity.aetasferreamod.boss.diamond_knight"));
         
         // 150 HP (75 hearts), full knockback resistance (1.0), and 15% speed increase
         safeSetAttribute(husk, Attributes.MAX_HEALTH, 150.0D);

@@ -19,6 +19,8 @@ package com.aetasferrea.aetasferreamod.events;
 
 // ---------- IMPORTS
 import com.aetasferrea.aetasferreamod.AetasFerreaMod;
+
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -47,7 +49,7 @@ import net.minecraftforge.fml.common.Mod;
 public class HarvestFrictionHandler {
 
     // ---------- CUSTOM HARVEST TAGS
-    public static final TagKey<Item> KNIVES = ItemTags.create(new ResourceLocation("forge", "tools/knives"));
+    public static final TagKey<Item> KNIVES = ItemTags.create(ResourceLocation.fromNamespaceAndPath("forge", "tools/knives"));
 
     // ---------- TOOL CONTEXT VALIDATION LOGIC
     private static class ToolContext {
@@ -113,7 +115,7 @@ public class HarvestFrictionHandler {
 
                 // Display hand notice warning
                 if (!player.getPersistentData().getBoolean("handInjuryNotice")) {
-                    player.displayClientMessage(Component.literal("§cPunching hard surfaces bare-handed tears your skin."), true);
+                    player.displayClientMessage(Component.translatable("message.aetasferreamod.harvest.punch_hard").withStyle(ChatFormatting.RED), true);
                     player.getPersistentData().putBoolean("handInjuryNotice", true);
                 }
 
@@ -131,7 +133,7 @@ public class HarvestFrictionHandler {
         Player player = event.getPlayer();
         if (player == null || player.isCreative()) return;
 
-        Level level = (Level) event.getLevel();
+        Level level = event.getLevel() instanceof Level ? (Level) event.getLevel() : player.level();
         BlockPos pos = event.getPos();
         BlockState state = event.getState();
         ItemStack item = player.getMainHandItem();
@@ -165,7 +167,7 @@ public class HarvestFrictionHandler {
 
                 // Display major hand injury warning
                 if (!player.getPersistentData().getBoolean("handInjuryNoticeMajor")) {
-                    player.displayClientMessage(Component.literal("§cYour hands split and bleed from forcing the wrong tools."), true);
+                    player.displayClientMessage(Component.translatable("message.aetasferreamod.harvest.wrong_tools").withStyle(ChatFormatting.RED), true);
                     player.getPersistentData().putBoolean("handInjuryNoticeMajor", true);
                 }
 

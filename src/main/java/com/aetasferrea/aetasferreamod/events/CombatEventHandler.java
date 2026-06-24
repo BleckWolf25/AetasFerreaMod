@@ -13,12 +13,14 @@
  * armor weight penalties.
  *
  * @since 20/05/2026
- * @updated 08/06/2026
+ * @updated 24/06/2026
  */
 // ---------- PACKAGE
 package com.aetasferrea.aetasferreamod.events;
 
 // ---------- IMPORTS
+import java.util.Objects;
+
 import com.aetasferrea.aetasferreamod.AetasFerreaConfig;
 import com.aetasferrea.aetasferreamod.AetasFerreaMod;
 import net.minecraft.resources.ResourceLocation;
@@ -59,17 +61,17 @@ public class CombatEventHandler {
     private static final java.util.UUID LEATHER_RECHARGE_UUID = java.util.UUID.fromString("0d6e6a10-4f5b-11ee-be56-0242ac120004");
 
     // ---------- CUSTOM WEAPON TAGS (METRICS)
-    public static final TagKey<Item> SLASHING = ItemTags.create(new ResourceLocation(AetasFerreaMod.MODID, "slashing_weapons"));
-    public static final TagKey<Item> HIGH_MASS = ItemTags.create(new ResourceLocation(AetasFerreaMod.MODID, "high_mass_weapons"));
-    public static final TagKey<Item> BLUNT = ItemTags.create(new ResourceLocation(AetasFerreaMod.MODID, "blunt_weapons"));
+    public static final TagKey<Item> SLASHING = ItemTags.create(Objects.requireNonNull(ResourceLocation.fromNamespaceAndPath(AetasFerreaMod.MODID, "slashing_weapons")));
+    public static final TagKey<Item> HIGH_MASS = ItemTags.create(Objects.requireNonNull(ResourceLocation.fromNamespaceAndPath(AetasFerreaMod.MODID, "high_mass_weapons")));
+    public static final TagKey<Item> BLUNT = ItemTags.create(Objects.requireNonNull(ResourceLocation.fromNamespaceAndPath(AetasFerreaMod.MODID, "blunt_weapons")));
 
     // Material tiers
-    public static final TagKey<Item> WOODEN = ItemTags.create(new ResourceLocation(AetasFerreaMod.MODID, "wooden_weapons"));
-    public static final TagKey<Item> STONE = ItemTags.create(new ResourceLocation(AetasFerreaMod.MODID, "stone_weapons"));
-    public static final TagKey<Item> IRON = ItemTags.create(new ResourceLocation(AetasFerreaMod.MODID, "iron_weapons"));
-    public static final TagKey<Item> GOLDEN = ItemTags.create(new ResourceLocation(AetasFerreaMod.MODID, "golden_weapons"));
-    public static final TagKey<Item> DIAMOND = ItemTags.create(new ResourceLocation(AetasFerreaMod.MODID, "diamond_weapons"));
-    public static final TagKey<Item> NETHERITE = ItemTags.create(new ResourceLocation(AetasFerreaMod.MODID, "netherite_weapons"));
+    public static final TagKey<Item> WOODEN = ItemTags.create(Objects.requireNonNull(ResourceLocation.fromNamespaceAndPath(AetasFerreaMod.MODID, "wooden_weapons")));
+    public static final TagKey<Item> STONE = ItemTags.create(Objects.requireNonNull(ResourceLocation.fromNamespaceAndPath(AetasFerreaMod.MODID, "stone_weapons")));
+    public static final TagKey<Item> IRON = ItemTags.create(Objects.requireNonNull(ResourceLocation.fromNamespaceAndPath(AetasFerreaMod.MODID, "iron_weapons")));
+    public static final TagKey<Item> GOLDEN = ItemTags.create(Objects.requireNonNull(ResourceLocation.fromNamespaceAndPath(AetasFerreaMod.MODID, "golden_weapons")));
+    public static final TagKey<Item> DIAMOND = ItemTags.create(Objects.requireNonNull(ResourceLocation.fromNamespaceAndPath(AetasFerreaMod.MODID, "diamond_weapons")));
+    public static final TagKey<Item> NETHERITE = ItemTags.create(Objects.requireNonNull(ResourceLocation.fromNamespaceAndPath(AetasFerreaMod.MODID, "netherite_weapons")));
 
     // ---------- FANTASY ARMOR KEYWORDS (FOR TIER CALCULATIONS)
     public static final String[] FANTASY_EARLY = {"lady_maria", "malenia", "wind_worshipper"};
@@ -86,12 +88,15 @@ public class CombatEventHandler {
         int count = 0;
         for (ItemStack stack : entity.getArmorSlots()) {
             if (!stack.isEmpty()) {
-                String id = net.minecraftforge.registries.ForgeRegistries.ITEMS.getKey(stack.getItem()).toString();
-                if (id.startsWith("fantasy_armor:")) {
-                    for (String keyword : keywords) {
-                        if (id.contains(keyword)) {
-                            count++;
-                            break;
+                net.minecraft.resources.ResourceLocation key = net.minecraftforge.registries.ForgeRegistries.ITEMS.getKey(stack.getItem());
+                if (key != null) {
+                    String id = key.toString();
+                    if (id.startsWith("fantasy_armor:")) {
+                        for (String keyword : keywords) {
+                            if (id.contains(keyword)) {
+                                count++;
+                                break;
+                            }
                         }
                     }
                 }
@@ -105,7 +110,9 @@ public class CombatEventHandler {
      */
     public static boolean isSpartanWeapon(ItemStack weapon) {
         if (weapon.isEmpty()) return false;
-        String id = net.minecraftforge.registries.ForgeRegistries.ITEMS.getKey(weapon.getItem()).toString();
+        net.minecraft.resources.ResourceLocation key = net.minecraftforge.registries.ForgeRegistries.ITEMS.getKey(weapon.getItem());
+        if (key == null) return false;
+        String id = key.toString();
         return id.startsWith("spartanweaponry:");
     }
 
@@ -114,7 +121,9 @@ public class CombatEventHandler {
      */
     public static boolean isSpartanBluntWeapon(ItemStack weapon) {
         if (!isSpartanWeapon(weapon)) return false;
-        String id = net.minecraftforge.registries.ForgeRegistries.ITEMS.getKey(weapon.getItem()).toString();
+        net.minecraft.resources.ResourceLocation key = net.minecraftforge.registries.ForgeRegistries.ITEMS.getKey(weapon.getItem());
+        if (key == null) return false;
+        String id = key.toString();
         return id.contains("warhammer") || id.contains("mace") || id.contains("flail") || id.contains("club") || id.contains("cestus") || id.contains("quarterstaff");
     }
 
@@ -123,7 +132,9 @@ public class CombatEventHandler {
      */
     public static boolean isSpartanHighMassWeapon(ItemStack weapon) {
         if (!isSpartanWeapon(weapon)) return false;
-        String id = net.minecraftforge.registries.ForgeRegistries.ITEMS.getKey(weapon.getItem()).toString();
+        net.minecraft.resources.ResourceLocation key = net.minecraftforge.registries.ForgeRegistries.ITEMS.getKey(weapon.getItem());
+        if (key == null) return false;
+        String id = key.toString();
         return id.contains("battleaxe") || id.contains("halberd") || id.contains("greatsword") || id.contains("lance") || id.contains("pike");
     }
 
@@ -205,7 +216,9 @@ public class CombatEventHandler {
             // Cancel fist damage against chainmail, iron, or diamond armor
             if (!isWeapon && (attacker instanceof Player || attacker instanceof Zombie || attacker instanceof Skeleton)) {
                 if (ironPieces > 0 || diamondPieces > 0 || fantasyEndgame > 0) {
-                    event.setAmount(0);
+                    // Use 0.01f instead of 0 so Minecraft's hurt pipeline still registers the attacker
+                    // and triggers neutral mob anger (Iron Golems, Endermen, etc.)
+                    event.setAmount(0.01f);
                     return;
                 }
             }
@@ -413,8 +426,8 @@ public class CombatEventHandler {
             }
 
             // Combat Roll Weight Integration
-            net.minecraft.world.entity.ai.attributes.Attribute countAttrDef = net.minecraftforge.registries.ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation("combatroll", "count"));
-            net.minecraft.world.entity.ai.attributes.Attribute rechargeAttrDef = net.minecraftforge.registries.ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation("combatroll", "recharge"));
+            net.minecraft.world.entity.ai.attributes.Attribute countAttrDef = net.minecraftforge.registries.ForgeRegistries.ATTRIBUTES.getValue(ResourceLocation.fromNamespaceAndPath("combatroll", "count"));
+            net.minecraft.world.entity.ai.attributes.Attribute rechargeAttrDef = net.minecraftforge.registries.ForgeRegistries.ATTRIBUTES.getValue(ResourceLocation.fromNamespaceAndPath("combatroll", "recharge"));
 
             if (countAttrDef != null || rechargeAttrDef != null) {
                 boolean isHeavy = false;
@@ -425,7 +438,12 @@ public class CombatEventHandler {
                         isFullLeather = false;
                         continue;
                     }
-                    String id = net.minecraftforge.registries.ForgeRegistries.ITEMS.getKey(stack.getItem()).toString();
+                    net.minecraft.resources.ResourceLocation key = net.minecraftforge.registries.ForgeRegistries.ITEMS.getKey(stack.getItem());
+                    if (key == null) {
+                        isFullLeather = false;
+                        continue;
+                    }
+                    String id = key.toString();
                     
                     boolean isFantasyEarly = id.startsWith("fantasy_armor:") && (id.contains("lady_maria") || id.contains("malenia") || id.contains("wind_worshipper"));
                     boolean isFantasyHeavy = id.startsWith("fantasy_armor:") && !isFantasyEarly;
@@ -449,7 +467,7 @@ public class CombatEventHandler {
                         if (isHeavy) {
                             countAttr.addTransientModifier(new AttributeModifier(HEAVY_UUID, "Heavy Armor Penalty", -10.0, AttributeModifier.Operation.ADDITION));
                             if (!player.getPersistentData().getBoolean("too_heavy_to_roll")) {
-                                player.displayClientMessage(net.minecraft.network.chat.Component.literal("§cYou are too heavy to perform agile rolls."), true);
+                                player.displayClientMessage(net.minecraft.network.chat.Component.translatable("message.aetasferreamod.combat.too_heavy_roll").withStyle(net.minecraft.ChatFormatting.RED), true);
                                 player.getPersistentData().putBoolean("too_heavy_to_roll", true);
                             }
                         } else {

@@ -1,43 +1,68 @@
+/**
+ * @file AetasFerreaMod.java
+ *
+ * @version 1.0.0
+ * @author Bleckwolf25
+ * @license MIT
+ *
+ * @summary Entry point for the Aetas Ferrea Forge mod.
+ *
+ * @description
+ * Initialises the mod by registering items, entities, network packets, and the common config,
+ * and conditionally registers the in-game config screen when no third-party config mod is present.
+ *
+ * @since 20/05/2026
+ * @updated 24/06/2026
+ */
+
+// ---------- PACKAGE
 package com.aetasferrea.aetasferreamod;
 
+// ---------- IMPORTS
+import com.aetasferrea.aetasferreamod.init.ModItems;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import com.aetasferrea.aetasferreamod.init.ModItems;
 
+// ---------- CLASS: AetasFerreaMod
 @Mod(AetasFerreaMod.MODID)
 public class AetasFerreaMod {
 
+    // ---------- CONSTANTS
     public static final String MODID = "aetasferreamod";
 
+    // ---------- CONSTRUCTOR
     public AetasFerreaMod() {
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        
+        IEventBus modEventBus = net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext.get().getModEventBus();
+
         ModItems.ITEMS.register(modEventBus);
         com.aetasferrea.aetasferreamod.init.EntityInit.ENTITIES.register(modEventBus);
 
-        // Required for safe Network setup
+        // Deferred to FMLCommonSetupEvent so network packets register on both sides safely
         modEventBus.addListener(this::commonSetup);
-        
+
         MinecraftForge.EVENT_BUS.register(this);
         net.minecraftforge.fml.ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, AetasFerreaConfig.SPEC);
 
+        // Only register the fallback config screen if no dedicated config mod is loaded
         if (net.minecraftforge.fml.loading.FMLEnvironment.dist.isClient()) {
-            if (!net.minecraftforge.fml.ModList.get().isLoaded("configured") && !net.minecraftforge.fml.ModList.get().isLoaded("yet_another_config_lib_v3")) {
+            if (!net.minecraftforge.fml.ModList.get().isLoaded("configured")
+                    && !net.minecraftforge.fml.ModList.get().isLoaded("yet_another_config_lib_v3")) {
                 ClientHelper.registerConfigScreen();
             }
         }
     }
 
-    // Guarantees network protocol registers correctly
+    // ---------- COMMON SETUP
     private void commonSetup(final net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent event) {
+        // enqueueWork ensures thread-safe execution during the setup phase
         event.enqueueWork(() -> {
             com.aetasferrea.aetasferreamod.network.PacketHandler.register();
         });
     }
 
+    // ---------- CLIENT CONFIG SCREEN REGISTRATION
     private static class ClientHelper {
         private static void registerConfigScreen() {
             net.minecraftforge.fml.ModLoadingContext.get().registerExtensionPoint(

@@ -307,14 +307,14 @@ public class WolfEventHandler {
                 // Wild predator aggressive targeting
                 if (!player.isCreative() && !player.isSpectator()) {
                     wolf.setTarget(player);
-                    player.displayClientMessage(net.minecraft.network.chat.Component.literal("§cAn aggressive wolf spots you!"), true);
+                    player.displayClientMessage(net.minecraft.network.chat.Component.translatable("message.aetasferreamod.wolf.spots_you").withStyle(net.minecraft.ChatFormatting.RED), true);
                 }
             }
         }
 
         // Pack Limit Enforcer: Limit owned wolves to 2. Excess wolves are untamed and turned hostile.
         if (ownedWolves.size() > 2) {
-            player.displayClientMessage(net.minecraft.network.chat.Component.literal("§cYou cannot command more than 2 wolves. The pack rejects the excess."), true);
+            player.displayClientMessage(net.minecraft.network.chat.Component.translatable("message.aetasferreamod.wolf.pack_rejects").withStyle(net.minecraft.ChatFormatting.RED), true);
 
             for (int i = 2; i < ownedWolves.size(); i++) {
                 Wolf extraWolf = ownedWolves.get(i);

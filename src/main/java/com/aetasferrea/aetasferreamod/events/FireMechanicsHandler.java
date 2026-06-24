@@ -46,7 +46,7 @@ import net.minecraftforge.fml.common.Mod;
 public class FireMechanicsHandler {
 
     // ---------- CUSTOM BURNING ITEMS TAG
-    private static final TagKey<Item> BURNING_ITEMS = TagKey.create(Registries.ITEM, new ResourceLocation(AetasFerreaMod.MODID, "burning_items"));
+    private static final TagKey<Item> BURNING_ITEMS = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(AetasFerreaMod.MODID, "burning_items"));
 
     // ---------- TICK EVENT HANDLERS (PLAYER BEHAVIORS)
     @SubscribeEvent

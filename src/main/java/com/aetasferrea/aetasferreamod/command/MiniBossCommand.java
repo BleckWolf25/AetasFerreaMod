@@ -83,10 +83,10 @@ public class MiniBossCommand {
         boolean success = MiniBossManager.spawnBossAtPosition(level, pos, type, player);
 
         if (success) {
-            source.sendSuccess(() -> Component.literal("Successfully spawned mini-boss: " + type), true);
+            source.sendSuccess(() -> Component.translatable("message.aetasferreamod.command.spawned_miniboss", type), true);
             return 1;
         } else {
-            source.sendFailure(Component.literal("Failed to spawn mini-boss. Unknown type or unsafe position."));
+            source.sendFailure(Component.translatable("message.aetasferreamod.command.failed_miniboss"));
             return 0;
         }
     }

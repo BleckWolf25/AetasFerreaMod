@@ -1,5 +1,27 @@
+/**
+ * @file HorseMechanicsHandler.java
+ *
+ * @version 1.0.0
+ * @author Bleckwolf25
+ * @license MIT
+ *
+ * @summary Forge event handler for custom equine mount interactions, XP tracking, and agility training.
+ *
+ * @description
+ * Handles mount refusal for untamed equines, rider ejection on damage, combat and agility XP accumulation
+ * for Rouncey-class horses, throttle-driven agility ticks, and displays subtitle notifications
+ * when specialization thresholds are reached.
+ *
+ * @since 20/05/2026
+ * @updated 24/06/2026
+ */
+
+// ---------- PACKAGE
 package com.aetasferrea.aetasferreamod.events;
 
+// ---------- IMPORTS
+import com.aetasferrea.aetasferreamod.AetasFerreaMod;
+import com.aetasferrea.aetasferreamod.entity.AetasDonkey;
 import com.aetasferrea.aetasferreamod.entity.HorseEventHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -19,9 +41,18 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = com.aetasferrea.aetasferreamod.AetasFerreaMod.MODID)
+// ---------- CLASS: HorseMechanicsHandler
+@Mod.EventBusSubscriber(modid = AetasFerreaMod.MODID)
+@SuppressWarnings({"null", "DataFlowIssue"})
 public class HorseMechanicsHandler {
 
+    // ---------- UTILITY METHODS
+    /**
+     * Sends a full-screen subtitle packet to a server player.
+     *
+     * @param player the target server player
+     * @param text   the subtitle component to display
+     */
     private static void displaySubtitle(Player player, Component text) {
         if (player instanceof ServerPlayer sp) {
             sp.connection.send(new net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket(10, 80, 20));
@@ -30,62 +61,95 @@ public class HorseMechanicsHandler {
         }
     }
 
+    // ---------- ENTITY MOUNT EVENTS
     @SubscribeEvent
     public static void onEntityMount(EntityMountEvent event) {
-        if (event.isMounting() && event.getEntityMounting() instanceof Player player && event.getEntityBeingMounted() instanceof HorseEventHandler horse) {
+        if (!event.isMounting() || !(event.getEntityMounting() instanceof Player player)) return;
+
+        net.minecraft.world.entity.Entity mount = event.getEntityBeingMounted();
+
+        // ---------- UNTAMED HORSE KICK ----------
+        if (mount instanceof HorseEventHandler horse) {
             if (!horse.isTamed()) {
                 event.setCanceled(true);
                 if (!horse.level().isClientSide) {
                     player.stopRiding();
                     player.hurt(player.damageSources().generic(), 2.0f);
                     player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 2));
+                    // Knock the player away from the horse
                     double dx = player.getX() - horse.getX();
                     double dz = player.getZ() - horse.getZ();
                     player.knockback(1.0, -dx, -dz);
                     horse.makeMad();
                     horse.level().playSound(null, horse.blockPosition(), SoundEvents.HORSE_ANGRY, SoundSource.NEUTRAL, 1.0f, 1.0f);
-                    player.displayClientMessage(Component.literal("The wild horse kicks you away! It must be broken first.").withStyle(ChatFormatting.RED), true);
+                    player.displayClientMessage(Component.translatable("message.aetasferreamod.horse.wild_kicks", Component.translatable("entity.aetasferreamod.aetas_horse")).withStyle(ChatFormatting.RED), true);
+                }
+            }
+        }
+
+        // ---------- UNTAMED DONKEY KICK ----------
+        else if (mount instanceof AetasDonkey donkey) {
+            if (!donkey.isTamed()) {
+                event.setCanceled(true);
+                if (!donkey.level().isClientSide) {
+                    player.stopRiding();
+                    player.hurt(player.damageSources().generic(), 2.0f);
+                    player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 2));
+                    double dx = player.getX() - donkey.getX();
+                    double dz = player.getZ() - donkey.getZ();
+                    player.knockback(1.0, -dx, -dz);
+                    donkey.makeMad();
+                    donkey.level().playSound(null, donkey.blockPosition(), SoundEvents.DONKEY_ANGRY, SoundSource.NEUTRAL, 1.0f, 1.0f);
+                    player.displayClientMessage(Component.translatable("message.aetasferreamod.horse.wild_kicks", Component.translatable("entity.aetasferreamod.aetas_donkey")).withStyle(ChatFormatting.RED), true);
                 }
             }
         }
     }
 
+    // ---------- DAMAGE EVENTS
     @SubscribeEvent
     public static void onLivingDamage(LivingDamageEvent event) {
         if (event.getEntity().level().isClientSide) return;
 
+        // Check if the damaged entity is a horse, or a player riding one
         HorseEventHandler horse = null;
         if (event.getEntity() instanceof HorseEventHandler h) horse = h;
         else if (event.getEntity() instanceof Player p && p.getVehicle() instanceof HorseEventHandler h) horse = h;
 
         if (horse != null) {
             int horseClass = horse.getHorseClass();
+
+            // ---------- ROUNCEY COMBAT XP (on damage received) ----------
             if (horseClass == HorseEventHandler.CLASS_ROUNCEY) {
                 int combatXP = horse.getCombatXP();
                 if (combatXP < 125 && combatXP != -1) {
                     long lastDamageXP = horse.getPersistentData().getLong("AetasDamageXPCooldown");
                     long gameTime = horse.tickCount;
+                    // 100-tick cooldown prevents XP spam from multi-hit attacks
                     if (gameTime - lastDamageXP >= 100L) {
                         horse.getPersistentData().putLong("AetasDamageXPCooldown", gameTime);
                         int previousXP = combatXP;
                         combatXP = Math.min(125, combatXP + 10);
                         horse.setCombatXP(combatXP);
+
                         if (previousXP < 65 && combatXP >= 65 && horse.getFirstPassenger() instanceof Player rider) {
                             horse.level().playSound(null, horse.blockPosition(), SoundEvents.HORSE_AMBIENT, SoundSource.NEUTRAL, 0.8f, 1.0f);
-                            rider.displayClientMessage(Component.literal("Your mount is growing more accustomed to the rigors of battle...").withStyle(ChatFormatting.GRAY), true);
+                            rider.displayClientMessage(Component.translatable("message.aetasferreamod.horse.accustomed_battle").withStyle(ChatFormatting.GRAY), true);
                         }
                         if (previousXP < 125 && combatXP >= 125) {
                             horse.level().playSound(null, horse.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 1.0f, 1.0f);
                             if (horse.level() instanceof ServerLevel sl) sl.sendParticles(ParticleTypes.HAPPY_VILLAGER, horse.getX(), horse.getY() + 1.5, horse.getZ(), 5, 0.5, 0.5, 0.5, 0.0);
                             if (horse.getFirstPassenger() instanceof Player rider) {
-                                displaySubtitle(rider, Component.literal("Your mount is now ready to become a Destrier!").withStyle(ChatFormatting.GOLD));
+                                displaySubtitle(rider, Component.translatable("message.aetasferreamod.horse.ready_destrier").withStyle(ChatFormatting.GOLD));
                             }
                         }
                     }
                 }
             }
 
+            // ---------- RIDER EJECTION (Non-Destrier only) ----------
             if (horseClass != HorseEventHandler.CLASS_DESTRIER && horse.isVehicle() && horse.level() instanceof ServerLevel sl) {
+                // 30% chance to panic and eject rider when hit
                 if (horse.getRandom().nextFloat() < 0.30f) {
                     horse.ejectPassengers();
                     horse.makeMad();
@@ -97,110 +161,112 @@ public class HorseMechanicsHandler {
         }
     }
 
+    // ---------- PLAYER ATTACK EVENTS
     @SubscribeEvent
     public static void onPlayerAttack(LivingHurtEvent event) {
-        if (event.getSource().getEntity() instanceof Player player) {
-            if (player.getVehicle() instanceof HorseEventHandler horse && !horse.level().isClientSide) {
-                if (event.getEntity() == horse) return;
-                if (!event.getSource().is(net.minecraft.world.damagesource.DamageTypes.PLAYER_ATTACK)) return;
+        if (!(event.getSource().getEntity() instanceof Player player)) return;
+        if (!(player.getVehicle() instanceof HorseEventHandler horse)) return;
+        if (horse.level().isClientSide) return;
+        if (event.getEntity() == horse) return;
+        if (!event.getSource().is(net.minecraft.world.damagesource.DamageTypes.PLAYER_ATTACK)) return;
 
-                double throttle = horse.getThrottle();
+        // ---------- ROUNCEY COMBAT XP (on attack dealt) ----------
+        if (horse.getHorseClass() == HorseEventHandler.CLASS_ROUNCEY) {
+            int combatXP = horse.getCombatXP();
+            if (combatXP < 125 && combatXP != -1) {
+                long lastCombatXP = horse.getPersistentData().getLong("AetasCombatXPCooldown");
+                long gameTime = horse.tickCount;
+                // 60-tick cooldown to prevent rapid XP inflation from quick attacks
+                if (gameTime - lastCombatXP >= 60L) {
+                    horse.getPersistentData().putLong("AetasCombatXPCooldown", gameTime);
+                    int previousXP = combatXP;
+                    combatXP = Math.min(125, combatXP + 5);
+                    horse.setCombatXP(combatXP);
 
-                if (horse.getHorseClass() == HorseEventHandler.CLASS_ROUNCEY) {
-                    int combatXP = horse.getCombatXP();
-                    if (combatXP < 125 && combatXP != -1) {
-                        long lastCombatXP = horse.getPersistentData().getLong("AetasCombatXPCooldown");
-                        long gameTime = horse.tickCount;
-                        if (gameTime - lastCombatXP >= 60L) {
-                            horse.getPersistentData().putLong("AetasCombatXPCooldown", gameTime);
-                            int previousXP = combatXP;
-                            combatXP = Math.min(125, combatXP + 5);
-                            horse.setCombatXP(combatXP);
-                            if (previousXP < 65 && combatXP >= 65) {
-                                horse.level().playSound(null, horse.blockPosition(), SoundEvents.HORSE_AMBIENT, SoundSource.NEUTRAL, 0.8f, 1.0f);
-                                player.displayClientMessage(Component.literal("Your mount is growing more accustomed to the rigors of battle...").withStyle(ChatFormatting.GRAY), true);
-                            }
-                            if (previousXP < 125 && combatXP >= 125) {
-                                horse.level().playSound(null, horse.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 1.0f, 1.0f);
-                                if (horse.level() instanceof ServerLevel sl) sl.sendParticles(ParticleTypes.HAPPY_VILLAGER, horse.getX(), horse.getY() + 1.5, horse.getZ(), 5, 0.5, 0.5, 0.5, 0.0);
-                                displaySubtitle(player, Component.literal("Your mount is now ready to become a Destrier!").withStyle(ChatFormatting.GOLD));
-                            }
-                        }
+                    if (previousXP < 65 && combatXP >= 65) {
+                        horse.level().playSound(null, horse.blockPosition(), SoundEvents.HORSE_AMBIENT, SoundSource.NEUTRAL, 0.8f, 1.0f);
+                        player.displayClientMessage(Component.translatable("message.aetasferreamod.horse.accustomed_battle").withStyle(ChatFormatting.GRAY), true);
                     }
-                }
-
-                if (throttle >= 0.5) {
-                    float momentumBonus = (float) ((throttle - 0.5) * 8.0);
-                    event.setAmount(event.getAmount() + momentumBonus);
+                    if (previousXP < 125 && combatXP >= 125) {
+                        horse.level().playSound(null, horse.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 1.0f, 1.0f);
+                        if (horse.level() instanceof ServerLevel sl) sl.sendParticles(ParticleTypes.HAPPY_VILLAGER, horse.getX(), horse.getY() + 1.5, horse.getZ(), 5, 0.5, 0.5, 0.5, 0.0);
+                        displaySubtitle(player, Component.translatable("message.aetasferreamod.horse.ready_destrier").withStyle(ChatFormatting.GOLD));
+                    }
                 }
             }
         }
     }
 
+    // ---------- LIVING JUMP EVENTS
     @SubscribeEvent
     public static void onLivingJump(LivingEvent.LivingJumpEvent event) {
-        if (event.getEntity() instanceof HorseEventHandler horse && !horse.level().isClientSide) {
-            if (horse.getHorseClass() == HorseEventHandler.CLASS_ROUNCEY) {
+        if (!(event.getEntity() instanceof HorseEventHandler horse) || horse.level().isClientSide) return;
+
+        // ---------- ROUNCEY AGILITY XP (on jump) ----------
+        if (horse.getHorseClass() == HorseEventHandler.CLASS_ROUNCEY) {
+            int agilityXP = horse.getAgilityXP();
+            if (agilityXP < 150 && agilityXP != -1) {
+                int previousXP = agilityXP;
+                agilityXP = Math.min(150, agilityXP + 5);
+                horse.setAgilityXP(agilityXP);
+
+                if (previousXP < 75 && agilityXP >= 75 && horse.getFirstPassenger() instanceof Player rider) {
+                    horse.level().playSound(null, horse.blockPosition(), SoundEvents.HORSE_AMBIENT, SoundSource.NEUTRAL, 0.8f, 1.0f);
+                    rider.displayClientMessage(Component.translatable("message.aetasferreamod.horse.accustomed_footwork").withStyle(ChatFormatting.GRAY), true);
+                }
+                if (previousXP < 150 && agilityXP >= 150) {
+                    horse.level().playSound(null, horse.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 1.0f, 1.0f);
+                    if (horse.level() instanceof ServerLevel sl) sl.sendParticles(ParticleTypes.HAPPY_VILLAGER, horse.getX(), horse.getY() + 1.5, horse.getZ(), 5, 0.5, 0.5, 0.5, 0.0);
+                    if (horse.getFirstPassenger() instanceof Player rider) {
+                        displaySubtitle(rider, Component.translatable("message.aetasferreamod.horse.ready_courser").withStyle(ChatFormatting.AQUA));
+                    }
+                }
+            }
+        }
+    }
+
+    // ---------- PLAYER TICK EVENTS
+    @SubscribeEvent
+    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        if (event.phase != TickEvent.Phase.END || event.player.level().isClientSide) return;
+        if (!(event.player.getVehicle() instanceof HorseEventHandler horse)) return;
+
+        // ---------- ROUNCEY AGILITY XP (on sustained high-throttle gallop) ----------
+        double throttle = horse.getThrottle();
+        if (horse.getHorseClass() == HorseEventHandler.CLASS_ROUNCEY && throttle > 0.6 && !horse.isHorseSwimming()) {
+            if (event.player.tickCount % 20 == 0) {
                 int agilityXP = horse.getAgilityXP();
                 if (agilityXP < 150 && agilityXP != -1) {
                     int previousXP = agilityXP;
-                    agilityXP = Math.min(150, agilityXP + 5);
+                    agilityXP = Math.min(150, agilityXP + 2);
                     horse.setAgilityXP(agilityXP);
-                    if (previousXP < 75 && agilityXP >= 75 && horse.getFirstPassenger() instanceof Player rider) {
+
+                    if (previousXP < 75 && agilityXP >= 75) {
                         horse.level().playSound(null, horse.blockPosition(), SoundEvents.HORSE_AMBIENT, SoundSource.NEUTRAL, 0.8f, 1.0f);
-                        rider.displayClientMessage(Component.literal("Your mount is growing more accustomed to nimble footwork...").withStyle(ChatFormatting.GRAY), true);
+                        event.player.displayClientMessage(Component.translatable("message.aetasferreamod.horse.accustomed_footwork").withStyle(ChatFormatting.GRAY), true);
                     }
                     if (previousXP < 150 && agilityXP >= 150) {
                         horse.level().playSound(null, horse.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 1.0f, 1.0f);
                         if (horse.level() instanceof ServerLevel sl) sl.sendParticles(ParticleTypes.HAPPY_VILLAGER, horse.getX(), horse.getY() + 1.5, horse.getZ(), 5, 0.5, 0.5, 0.5, 0.0);
-                        if (horse.getFirstPassenger() instanceof Player rider) {
-                            displaySubtitle(rider, Component.literal("Your mount is now ready to become a Courser!").withStyle(ChatFormatting.AQUA));
-                        }
+                        displaySubtitle(event.player, Component.translatable("message.aetasferreamod.horse.ready_courser").withStyle(ChatFormatting.AQUA));
                     }
                 }
             }
         }
-    }
 
-    @SubscribeEvent
-    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.phase == TickEvent.Phase.END && !event.player.level().isClientSide) {
-            if (event.player.getVehicle() instanceof HorseEventHandler horse) {
-                double throttle = horse.getThrottle();
-                if (horse.getHorseClass() == HorseEventHandler.CLASS_ROUNCEY && throttle > 0.6) {
-                    if (event.player.tickCount % 20 == 0) {
-                        int agilityXP = horse.getAgilityXP();
-                        if (agilityXP < 150 && agilityXP != -1) {
-                            int previousXP = agilityXP;
-                            agilityXP = Math.min(150, agilityXP + 2);
-                            horse.setAgilityXP(agilityXP);
-                            if (previousXP < 75 && agilityXP >= 75) {
-                                horse.level().playSound(null, horse.blockPosition(), SoundEvents.HORSE_AMBIENT, SoundSource.NEUTRAL, 0.8f, 1.0f);
-                                event.player.displayClientMessage(Component.literal("Your mount is growing more accustomed to nimble footwork...").withStyle(ChatFormatting.GRAY), true);
-                            }
-                            if (previousXP < 150 && agilityXP >= 150) {
-                                horse.level().playSound(null, horse.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 1.0f, 1.0f);
-                                if (horse.level() instanceof ServerLevel sl) sl.sendParticles(ParticleTypes.HAPPY_VILLAGER, horse.getX(), horse.getY() + 1.5, horse.getZ(), 5, 0.5, 0.5, 0.5, 0.0);
-                                displaySubtitle(event.player, Component.literal("Your mount is now ready to become a Courser!").withStyle(ChatFormatting.AQUA));
-                            }
-                        }
-                    }
-                }
-
-                if (horse.getHorseClass() == HorseEventHandler.CLASS_ROUNCEY) {
-                    int combatXP = horse.getCombatXP();
-                    int agilityXP = horse.getAgilityXP();
-                    if ((combatXP >= 125 && combatXP != -1) || (agilityXP >= 150 && agilityXP != -1)) {
-                        // Repeating every 60 ticks ensures seamless action bar duration without blinking/fading
-                        if (event.player.tickCount % 60 == 0) {
-                            if (combatXP >= 125 && combatXP != -1 && agilityXP >= 150 && agilityXP != -1) {
-                                event.player.displayClientMessage(Component.literal("Ready for Specialization: Bring Iron Ingot (Destrier) or Leather & Feather (Courser).").withStyle(ChatFormatting.GREEN), true);
-                            } else if (combatXP >= 125 && combatXP != -1) {
-                                event.player.displayClientMessage(Component.literal("Ready for Specialization: Bring an Iron Ingot to upgrade to a Destrier.").withStyle(ChatFormatting.GREEN), true);
-                            } else if (agilityXP >= 150 && agilityXP != -1) {
-                                event.player.displayClientMessage(Component.literal("Ready for Specialization: Bring Leather & Feathers to upgrade to a Courser.").withStyle(ChatFormatting.GREEN), true);
-                            }
-                        }
+        // ---------- SPECIALIZATION READINESS REMINDER (every 60 ticks) ----------
+        if (horse.getHorseClass() == HorseEventHandler.CLASS_ROUNCEY) {
+            int combatXP = horse.getCombatXP();
+            int agilityXP = horse.getAgilityXP();
+            int customClass = horse.getHorseClass();
+            if ((combatXP >= 125 && combatXP != -1) || (agilityXP >= 150 && agilityXP != -1)) {
+                if (event.player.tickCount % 60 == 0) {
+                    if (combatXP >= 125 && combatXP != -1 && agilityXP >= 150 && agilityXP != -1) {
+                        event.player.displayClientMessage(Component.translatable("message.aetasferreamod.horse.ready_spec").withStyle(ChatFormatting.GREEN), true);
+                    } else if (customClass == HorseEventHandler.CLASS_ROUNCEY && combatXP >= 125) {
+                        event.player.displayClientMessage(Component.translatable("message.aetasferreamod.horse.ready_spec_destrier").withStyle(ChatFormatting.GREEN), true);
+                    } else if (customClass == HorseEventHandler.CLASS_ROUNCEY && agilityXP >= 150) {
+                        event.player.displayClientMessage(Component.translatable("message.aetasferreamod.horse.ready_spec_courser").withStyle(ChatFormatting.GREEN), true);
                     }
                 }
             }
