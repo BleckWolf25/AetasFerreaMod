@@ -5,6 +5,11 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "aetasferreamod.refmap.json",
   "mixins": [
+    "PufferfishMixin",
+    "FoxMixin",
+    "SquidMixin",
+    "ChickenMixin",
+    "LivingEntityMixin"
   ],
   "client": [
   ],

@@ -125,6 +125,11 @@ public class AetasMule extends Mule {
     }
 
     @Override
+    protected net.minecraft.network.chat.Component getTypeName() {
+        return net.minecraft.network.chat.Component.translatable("entity.minecraft.mule");
+    }
+
+    @Override
     protected void randomizeAttributes(@Nonnull net.minecraft.util.RandomSource random) {
         super.randomizeAttributes(random);
         rerollStats(random);

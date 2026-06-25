@@ -133,6 +133,11 @@ public class AetasDonkey extends Donkey {
     }
 
     @Override
+    protected net.minecraft.network.chat.Component getTypeName() {
+        return net.minecraft.network.chat.Component.translatable("entity.minecraft.donkey");
+    }
+
+    @Override
     protected void randomizeAttributes(@Nonnull net.minecraft.util.RandomSource random) {
         super.randomizeAttributes(random);
         rerollStats(random);

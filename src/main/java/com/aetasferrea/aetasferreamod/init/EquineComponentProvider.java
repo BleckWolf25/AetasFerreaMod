@@ -5,12 +5,12 @@
  * @author Bleckwolf25
  * @license MIT
  *
- * @summary Jade (Waila) entity component provider that appends equine stat tooltips.
+ * @summary Jade (Waila) entity component provider that appends equine custom stat tooltips.
  *
  * @description
  * Implements IEntityComponentProvider as a singleton enum to inject custom HUD lines into the Jade tooltip
- * for any AbstractHorse entity, including speed in blocks/s, jump height in blocks, max health in hearts,
- * taming status, horse class, temper progress, daily feeding count, and specialization XP bars.
+ * for any AbstractHorse entity, including max health in hearts, taming status, horse class,
+ * temper progress, daily feeding count, and specialization XP bars.
  *
  * @since 20/05/2026
  * @updated 24/06/2026
@@ -26,7 +26,6 @@ import com.aetasferrea.aetasferreamod.entity.AetasDonkey;
 import com.aetasferrea.aetasferreamod.entity.HorseEventHandler;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import snownee.jade.api.EntityAccessor;
 import snownee.jade.api.IEntityComponentProvider;
@@ -46,20 +45,10 @@ public enum EquineComponentProvider implements IEntityComponentProvider {
     public void appendTooltip(ITooltip tooltip, EntityAccessor accessor, IPluginConfig config) {
         if (!(accessor.getEntity() instanceof AbstractHorse horse)) return;
 
-        // ---------- STATS (Speed / Jump / Health)
-        double speedAttr = horse.getAttributeValue(Objects.requireNonNull(Attributes.MOVEMENT_SPEED));
-        // Empirically calibrated multiplier matching vanilla horse speed at attribute value 1.0
-        double blocksPerSec = speedAttr * 42.16;
-
-        double jumpAttr = horse.getAttributeValue(Objects.requireNonNull(Attributes.JUMP_STRENGTH));
-        // Rough estimation: jump_strength * 5.5 ≈ max jump height in blocks
-        double jumpBlocks = jumpAttr * 5.5;
-
+        // ---------- STATS (Health)
         double maxHealth = horse.getMaxHealth();
 
-        tooltip.add(Component.translatable("tooltip.aetasferreamod.horse.speed", blocksPerSec).withStyle(net.minecraft.ChatFormatting.GREEN));
-        tooltip.add(Component.translatable("tooltip.aetasferreamod.horse.jump", jumpBlocks).withStyle(net.minecraft.ChatFormatting.AQUA));
-        tooltip.add(Component.translatable("tooltip.aetasferreamod.horse.health", maxHealth, maxHealth / 2.0f).withStyle(net.minecraft.ChatFormatting.RED));
+        tooltip.add(Component.translatable("tooltip.aetasferreamod.horse.health", String.format(java.util.Locale.ROOT, "%.1f", maxHealth), String.format(java.util.Locale.ROOT, "%.1f", maxHealth / 2.0)).withStyle(net.minecraft.ChatFormatting.RED));
 
         // ---------- TAMING STATUS
         boolean isTamed = horse.isTamed();

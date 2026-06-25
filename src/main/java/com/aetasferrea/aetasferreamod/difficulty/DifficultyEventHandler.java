@@ -12,7 +12,7 @@
  * Banishment rules and surface caps throttle mob levels in the early days.
  *
  * @since 20/05/2026
- * @updated 08/06/2026
+ * @updated 24/06/2026
  */
 // ---------- PACKAGE
 package com.aetasferrea.aetasferreamod.difficulty;
@@ -37,9 +37,11 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraftforge.event.entity.living.LivingConversionEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
 
 // ---------- CLASS: DIFFICULTY EVENT HANDLER
 @Mod.EventBusSubscriber(modid = "aetasferreamod")
@@ -56,6 +58,9 @@ public class DifficultyEventHandler {
     public static void onFinalizeSpawn(MobSpawnEvent.FinalizeSpawn event) {
         LevelAccessor levelAccessor = event.getLevel();
         if (!(levelAccessor instanceof ServerLevelAccessor serverLevel)) return;
+        
+        // Prevent late cancellation exception during conversion (e.g. Villager -> Zombie Villager)
+        if (event.getSpawnType() == net.minecraft.world.entity.MobSpawnType.CONVERSION) return;
         
         Level level = serverLevel.getLevel();
         LivingEntity entity = event.getEntity();
@@ -162,6 +167,15 @@ public class DifficultyEventHandler {
                     }
                 }
             }
+        }
+    }
+
+    // ---------- ENTITY JOIN LEVEL EVENTS
+    @SubscribeEvent
+    public static void onEntityJoinLevel(EntityJoinLevelEvent event) {
+        if (event.getLevel().isClientSide()) return;
+        if (event.getEntity() instanceof Zombie zombie && zombie.isBaby()) {
+            zombie.setBaby(false);
         }
     }
 }

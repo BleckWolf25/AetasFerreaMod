@@ -66,6 +66,7 @@
   "entity.aetasferreamod.horse.destrier": "Destrier",
   "entity.aetasferreamod.horse.courser": "Courser",
   "entity.aetasferreamod.horse.palfrey": "Palfrey",
+  "entity.aetasferreamod.horse.wild": "Wild",
   "entity.aetasferreamod.pack_donkey": "Pack Donkey",
 
   "message.aetasferreamod.wolf.spots_you": "An aggressive wolf spots you!",
@@ -87,9 +88,9 @@
   "message.aetasferreamod.harvest.punch_hard": "Punching hard surfaces bare-handed tears your skin.",
   "message.aetasferreamod.harvest.wrong_tools": "Your hands split and bleed from forcing the wrong tools.",
 
-  "tooltip.aetasferreamod.horse.speed": "Speed: %.2f Blocks/s",
-  "tooltip.aetasferreamod.horse.jump": "Jump: %.2f Blocks",
-  "tooltip.aetasferreamod.horse.health": "Health: %.1f HP (%.1f Hearts)",
+  "tooltip.aetasferreamod.horse.speed": "Speed: %s Blocks/s",
+  "tooltip.aetasferreamod.horse.jump": "Jump: %s Blocks",
+  "tooltip.aetasferreamod.horse.health": "Health: %s HP (%s Hearts)",
   "tooltip.aetasferreamod.horse.status": "Status: ",
   "tooltip.aetasferreamod.horse.status_tamed": "Tamed",
   "tooltip.aetasferreamod.horse.status_untamed": "Untamed (Temper: %d/%d)",

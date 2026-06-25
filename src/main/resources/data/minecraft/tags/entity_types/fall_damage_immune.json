@@ -1,0 +1,6 @@
+{
+  "replace": false,
+  "remove": [
+    "minecraft:chicken"
+  ]
+}

@@ -135,6 +135,11 @@ public class HorseEventHandler extends Horse {
     }
 
     @Override
+    protected Component getTypeName() {
+        return Component.translatable("entity.minecraft.horse");
+    }
+
+    @Override
     protected void removePassenger(net.minecraft.world.entity.Entity passenger) {
         super.removePassenger(passenger);
         if (passenger instanceof Player player && !this.level().isClientSide) {
