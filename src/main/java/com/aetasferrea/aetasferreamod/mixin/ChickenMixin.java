@@ -12,7 +12,7 @@
  * slow-falling drag when a chicken has fallen past a threshold height, representing fatigue.
  *
  * @since 25/06/2026
- * @updated 25/06/2026
+ * @updated 26/06/2026
  */
 // ---------- PACKAGE
 package com.aetasferrea.aetasferreamod.mixin;
@@ -20,6 +20,7 @@ package com.aetasferrea.aetasferreamod.mixin;
 // ---------- IMPORTS
 import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.phys.Vec3;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;

@@ -13,7 +13,7 @@
  * and enforces material progression requirements on weapon, tool, and armor purchases.
  *
  * @since 23/06/2026
- * @updated 25/06/2026
+ * @updated 26/06/2026
  */
 // ---------- PACKAGE
 package com.aetasferrea.aetasferreamod.events;
@@ -231,11 +231,11 @@ public class EconomyEventHandler {
             Item resultItem = result.getItem();
             if (resultItem instanceof ArmorItem) {
                 int minPrice = AetasFerreaConfig.ARMOR_TRADE_MIN_PRICE.get();
-                if (costA.is(requireNonNull(finalCurrency)) && costA.getCount() < minPrice) {
-                    costA.setCount(minPrice);
+                if (costA.is(requireNonNull(finalCurrency))) {
+                    costA.setCount(EconomyMath.calculateArmorTradeCost(costA.getCount(), minPrice));
                 }
-                if (costB.is(requireNonNull(finalCurrency)) && costB.getCount() < minPrice) {
-                    costB.setCount(minPrice);
+                if (costB.is(requireNonNull(finalCurrency))) {
+                    costB.setCount(EconomyMath.calculateArmorTradeCost(costB.getCount(), minPrice));
                 }
             }
 
