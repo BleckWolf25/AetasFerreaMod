@@ -2,7 +2,64 @@
  Aetas Ferrea Mod - Changelog
 ================================================================================
 
-Version 1.0.0
+Version 1.0.0 [BETA]
+============
+- Updated status to BETA release.
+- Added Equine / Mounted Combat Overhaul:
+  - Equine classes: Wild, Rouncey, Destrier, Courser, Palfrey.
+  - Realistic riding mechanics: Sigmoidal throttle, walk speed caps, reverse gear, high-speed fall damage.
+  - Feeding taming system: Wild horses must be leashed and hand-fed daily.
+  - Specializations: Training Rounceys via combat and agility XP into Destriers, Coursers, or Palfreys.
+  - Chests on mounts: Palfreys, Rounceys, donkeys, and mules can carry chests for storage.
+  - Aquatic behavior: Donkeys and mules sink under heavy load; donkeys panic and throw riders in deep water.
+- Added Wolf AI & Pack Defense Mechanics:
+  - Quiet stealth following goal replacing standard AI.
+  - Aggressive wild predator spawns (25% chance) targeting players.
+  - Tactical retreat: wolves run away and gain Speed II when health falls below 30%.
+  - Combat stuns (alternate strikes) and post-attack slow.
+  - Pack Limit: owner tamed wolves capped at 2. Excess wolves turn hostile.
+  - Hound threat auto-targeting: standing tamed wolves auto-target monsters within 10 blocks (excluding Creepers).
+- Added Regional & Progression Difficulty Engine:
+  - World Age Mob Cap: Surface hostile spawns throttled based on days (12 early, scaling up to 60 after Day 31).
+  - Equipment Progression: Gearless spawns (Days 0-3), shields/stone tools (Days 6-7), and leather/chainmail scout variants (Day 11+).
+  - Banishment & Conversion: Creepers/Witches permanently banned. Day 0 bans Skeletons, Vindicators, Drowned. Pre-Day 5 zombie-drowned conversion blocked.
+  - Baby zombie aging: Baby zombies automatically age to adults.
+  - Smithing lock: Prevents crafting legendary gear (Ornstein, Dragonslayer) before slaying the Ender Dragon.
+- Added Progressive Night Mini-Bosses:
+  - Catena-Mail Vigil (60 HP Skeleton archer with Glowing, stationary firing, and guard summoning).
+  - Defiled Castellan (80 HP Husk with Weakness, Mining Fatigue, horizontal knockback, and shield-bypassing).
+  - Dead Iron Knight (100 HP Husk with 4 Sapper guards, anti-fortification block breaking).
+  - Diamond Knight (150 HP Husk with armor shedding, progressive speed boosts, and knockback resistance).
+- Added Ecological & Environmental Balance:
+  - Biome-specific fishing (restricts native fish drops, yields junk otherwise).
+  - Squid beaching prevention and puddle spawning protection.
+  - Spider surface spawning restricted to forest and jungle biomes.
+  - Pufferfish inflation stamina limits (forced deflation and cooldown).
+  - Chicken wing fatigue and fall damage when falling more than 8 blocks.
+  - Fox holding restrictions (foxes only hold items in the custom `fox_holdable` item tag).
+- Added Medieval Barter & Progression Economy:
+  - Currency reform: Emeralds replaced by copper, raw iron, or raw gold based on villager profession and level.
+  - Material tier trade upgrades: Previous material tier is required to buy higher-tier tools/weapons/armor.
+  - Wandering Trader Overhaul: Offers exotic items (saddles, blaze rods, totems, gold apples) for emeralds.
+- Added Bare-Handed Harvest Restrictions:
+  - Mining fatigue III, direct health, and arm limb trauma (LSO integration) when harvesting incorrectly.
+  - Knives used as slow axe alternative for log chopping (consumes high durability, grants Haste).
+- Added Client-Side HUD & Tooltip Enhancements:
+  - Waila/Jade integration showing horse stats (class, breaking progress, daily feeds, XP).
+  - Re-formatted Attribute Tooltips: slot-sorted absolute/delta display with clean rounding.
+- Added Thermodynamic & Burning Combat Mechanics:
+  - Lava Quenching underwater (bucket quenches to empty, creates obsidian).
+  - Panic Speed boost when players are on fire.
+  - Burning melee attacks with items tagged under `burning_items` (5s burn).
+- Modernization & Quality of Life:
+  - Migrated dependencies to Gradle Version Catalog (`libs.versions.toml`).
+  - Added Maven repository content filters to optimize build speeds.
+  - Configured GitHub Actions CI/CD pipeline for compilation checks and automatic publishing.
+  - Migrated static tags to Java-based Data Generation providers.
+  - Fixed persistent display message cooldown bug.
+  - Compressed logo file to WebP format.
+
+Version 1.0.0 [ALPHA]
 =============
 - Initial Release of Aetas Ferrea.
 - Added Golden Dulling: Golden weapons and tools dynamically lose attack damage, attack speed, and block break speed as durability drops.

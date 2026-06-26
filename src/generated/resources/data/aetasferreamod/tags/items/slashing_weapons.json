@@ -1,0 +1,112 @@
+{
+  "values": [
+    {
+      "id": "minecraft:wooden_sword",
+      "required": false
+    },
+    {
+      "id": "minecraft:stone_sword",
+      "required": false
+    },
+    {
+      "id": "minecraft:iron_sword",
+      "required": false
+    },
+    {
+      "id": "minecraft:golden_sword",
+      "required": false
+    },
+    {
+      "id": "minecraft:diamond_sword",
+      "required": false
+    },
+    {
+      "id": "minecraft:netherite_sword",
+      "required": false
+    },
+    {
+      "id": "spartanweaponry:wooden_dagger",
+      "required": false
+    },
+    {
+      "id": "spartanweaponry:stone_dagger",
+      "required": false
+    },
+    {
+      "id": "spartanweaponry:iron_dagger",
+      "required": false
+    },
+    {
+      "id": "spartanweaponry:diamond_dagger",
+      "required": false
+    },
+    {
+      "id": "spartanweaponry:wooden_parrying_dagger",
+      "required": false
+    },
+    {
+      "id": "spartanweaponry:stone_parrying_dagger",
+      "required": false
+    },
+    {
+      "id": "spartanweaponry:iron_parrying_dagger",
+      "required": false
+    },
+    {
+      "id": "spartanweaponry:diamond_parrying_dagger",
+      "required": false
+    },
+    {
+      "id": "spartanweaponry:wooden_longsword",
+      "required": false
+    },
+    {
+      "id": "spartanweaponry:stone_longsword",
+      "required": false
+    },
+    {
+      "id": "spartanweaponry:iron_longsword",
+      "required": false
+    },
+    {
+      "id": "spartanweaponry:diamond_longsword",
+      "required": false
+    },
+    {
+      "id": "spartanweaponry:wooden_greatsword",
+      "required": false
+    },
+    {
+      "id": "spartanweaponry:stone_greatsword",
+      "required": false
+    },
+    {
+      "id": "spartanweaponry:iron_greatsword",
+      "required": false
+    },
+    {
+      "id": "spartanweaponry:diamond_greatsword",
+      "required": false
+    },
+    {
+      "id": "farmersdelight:flint_knife",
+      "required": false
+    },
+    {
+      "id": "farmersdelight:iron_knife",
+      "required": false
+    },
+    {
+      "id": "farmersdelight:diamond_knife",
+      "required": false
+    },
+    {
+      "id": "farmersdelight:golden_knife",
+      "required": false
+    },
+    {
+      "id": "farmersdelight:netherite_knife",
+      "required": false
+    }
+  ]
+}

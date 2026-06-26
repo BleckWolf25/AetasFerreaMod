@@ -12,9 +12,8 @@
  * and conditionally registers the in-game config screen when no third-party config mod is present.
  *
  * @since 20/05/2026
- * @updated 24/06/2026
+ * @updated 25/06/2026
  */
-
 // ---------- PACKAGE
 package com.aetasferrea.aetasferreamod;
 
@@ -43,6 +42,29 @@ public class AetasFerreaMod {
         modEventBus.addListener(this::commonSetup);
 
         MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(com.aetasferrea.aetasferreamod.events.MobSpawnEventHandler.class);
+        MinecraftForge.EVENT_BUS.register(com.aetasferrea.aetasferreamod.events.EconomyEventHandler.class);
+        MinecraftForge.EVENT_BUS.register(com.aetasferrea.aetasferreamod.events.FishingEventHandler.class);
+        MinecraftForge.EVENT_BUS.register(com.aetasferrea.aetasferreamod.command.EquineTestCommand.class);
+        MinecraftForge.EVENT_BUS.register(com.aetasferrea.aetasferreamod.command.MiniBossCommand.class);
+        MinecraftForge.EVENT_BUS.register(com.aetasferrea.aetasferreamod.command.VillagerTestCommand.class);
+        MinecraftForge.EVENT_BUS.register(com.aetasferrea.aetasferreamod.difficulty.DifficultyEventHandler.class);
+        MinecraftForge.EVENT_BUS.register(com.aetasferrea.aetasferreamod.entity.ai.WolfEventHandler.class);
+        MinecraftForge.EVENT_BUS.register(com.aetasferrea.aetasferreamod.entity.boss.BossCombatHandler.class);
+        MinecraftForge.EVENT_BUS.register(com.aetasferrea.aetasferreamod.entity.boss.MiniBossManager.class);
+        if (net.minecraftforge.fml.loading.FMLEnvironment.dist.isClient()) {
+            MinecraftForge.EVENT_BUS.register(com.aetasferrea.aetasferreamod.events.AttributeTooltipEventHandler.class);
+        }
+        MinecraftForge.EVENT_BUS.register(com.aetasferrea.aetasferreamod.events.CombatEventHandler.class);
+        MinecraftForge.EVENT_BUS.register(com.aetasferrea.aetasferreamod.events.DragonProgressionHandler.class);
+        MinecraftForge.EVENT_BUS.register(com.aetasferrea.aetasferreamod.events.FantasyArmorHandler.class);
+        MinecraftForge.EVENT_BUS.register(com.aetasferrea.aetasferreamod.events.FireMechanicsHandler.class);
+        MinecraftForge.EVENT_BUS.register(com.aetasferrea.aetasferreamod.events.GoldenEnchantmentHandler.class);
+        MinecraftForge.EVENT_BUS.register(com.aetasferrea.aetasferreamod.events.GoldenEquipmentEventHandler.class);
+        MinecraftForge.EVENT_BUS.register(com.aetasferrea.aetasferreamod.events.HarvestFrictionHandler.class);
+        MinecraftForge.EVENT_BUS.register(com.aetasferrea.aetasferreamod.events.HorseMechanicsHandler.class);
+        MinecraftForge.EVENT_BUS.register(com.aetasferrea.aetasferreamod.events.HorseReplacementHandler.class);
+        
         net.minecraftforge.fml.ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, AetasFerreaConfig.SPEC);
 
         // Only register the fallback config screen if no dedicated config mod is loaded

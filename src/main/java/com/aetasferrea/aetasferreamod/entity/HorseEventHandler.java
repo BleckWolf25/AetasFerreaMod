@@ -164,7 +164,7 @@ public class HorseEventHandler extends Horse {
         double waterHeight = this.getFluidHeight(net.minecraft.tags.FluidTags.WATER);
         
         if (this.isSwimming) {
-            // Stop swimming if water is very shallow, or if we touch the ground in shallow water
+            // Stop swimming if water is very shallow, or if can touch the ground in shallow water
             if (waterHeight < 0.3 || (this.onGround() && waterHeight < 0.7)) {
                 this.isSwimming = false;
             }
@@ -220,7 +220,7 @@ public class HorseEventHandler extends Horse {
                     rider.displayClientMessage(Component.translatable("message.aetasferreamod.horse.begins_swim").withStyle(ChatFormatting.AQUA), true);
                 }
             } else if (!this.isSwimming && this.wasSwimming) {
-                // Exited water — full throttle reset
+                // Exited waterfull throttle reset
                 this.throttle = 0.0;
                 this.swimTicks = 0;
                 if (this.getFirstPassenger() instanceof Player rider) {
@@ -679,7 +679,7 @@ public class HorseEventHandler extends Horse {
 
     /**
      * Clamps existing attribute base values into valid range for the given class.
-     * Unlike applyClassAttributeCaps, this does NOT re-roll random values —
+     * Unlike applyClassAttributeCaps, this does NOT re-roll random values
      * it preserves existing stats and only adjusts them if they fall outside bounds.
      */
     public void enforceClassAttributeCaps(int horseClass) {

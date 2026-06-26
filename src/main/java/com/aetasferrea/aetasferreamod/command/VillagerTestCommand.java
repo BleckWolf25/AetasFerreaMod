@@ -13,7 +13,7 @@
  * alongside one wandering trader, setting all of their AI to disabled so they remain perfectly stationary.
  *
  * @since 23/06/2026
- * @updated 24/06/2026
+ * @updated 25/06/2026
  */
 // ---------- PACKAGE
 package com.aetasferrea.aetasferreamod.command;
@@ -21,7 +21,6 @@ package com.aetasferrea.aetasferreamod.command;
 // ---------- IMPORTS
 import static java.util.Objects.requireNonNull;
 
-import com.aetasferrea.aetasferreamod.AetasFerreaMod;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -37,10 +36,9 @@ import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
 // ---------- CLASS: VillagerTestCommand
-@Mod.EventBusSubscriber(modid = AetasFerreaMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+
 public class VillagerTestCommand {
 
     // ---------- COMMAND REGISTRATION

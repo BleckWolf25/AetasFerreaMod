@@ -18,8 +18,6 @@
 // ---------- PACKAGE
 package com.aetasferrea.aetasferreamod.events;
 
-// ---------- IMPORTS
-import com.aetasferrea.aetasferreamod.AetasFerreaMod;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -31,7 +29,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraft.resources.ResourceLocation;
 import java.util.*;
@@ -40,11 +37,38 @@ import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 
 // ---------- CLASS: ATTRIBUTETOOLTIPEVENTHANDLER
-@Mod.EventBusSubscriber(modid = AetasFerreaMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+
 public class AttributeTooltipEventHandler {
 
     // ---------- CONSTANTS
     private static final Pattern ATTRIBUTE_LINE_PATTERN = Pattern.compile("^\\s*[+-]?\\s*\\d+(?:\\.\\d+)?%?\\s+(.*)$");
+    private static final ThreadLocal<Matcher> ATTRIBUTE_MATCHER = ThreadLocal.withInitial(() -> ATTRIBUTE_LINE_PATTERN.matcher(""));
+    private static final EquipmentSlot[] SLOTS = EquipmentSlot.values();
+
+    // ---------- CACHING
+    private static final List<String> SLOT_HEADERS = new ArrayList<>();
+    private static final Map<Attribute, String> ATTRIBUTE_NAME_CACHE = new IdentityHashMap<>();
+    private static String lastLanguageCacheKey = null;
+
+    private static void refreshTranslationCache() {
+        String currentKey = Component.translatable("item.modifiers.mainhand").getString();
+        if (currentKey.equals(lastLanguageCacheKey)) {
+            return;
+        }
+        
+        lastLanguageCacheKey = currentKey;
+        SLOT_HEADERS.clear();
+        for (EquipmentSlot slot : SLOTS) {
+            SLOT_HEADERS.add(Component.translatable("item.modifiers." + slot.getName()).getString());
+        }
+        ATTRIBUTE_NAME_CACHE.clear();
+    }
+
+    private static String getTranslatedAttributeName(Attribute attribute) {
+        if (attribute == null || attribute.getDescriptionId() == null) return "";
+        return ATTRIBUTE_NAME_CACHE.computeIfAbsent(attribute, 
+            a -> Component.translatable(Objects.requireNonNull(a.getDescriptionId())).getString().toLowerCase(Locale.ROOT));
+    }
 
     // ---------- ALWAYS ABSOLUTE CHECK
     private static boolean isAlwaysAbsoluteAttribute(String descId) {
@@ -184,22 +208,17 @@ public class AttributeTooltipEventHandler {
 
         Player player = event.getEntity();
 
-        // ---------- TOOLTIP SCAN (Identify and mark old attribute/CIA lines to remove)
-        List<String> slotHeaders = new ArrayList<>();
-        for (EquipmentSlot slot : EquipmentSlot.values()) {
-            slotHeaders.add(Component.translatable("item.modifiers." + slot.getName()).getString());
-        }
+        refreshTranslationCache();
 
+        // ---------- TOOLTIP SCAN (Identify and mark old attribute/CIA lines to remove)
         // Collect translated names of all active attributes on this item for matching
         Set<String> activeAttributeNames = new HashSet<>();
-        for (EquipmentSlot slot : EquipmentSlot.values()) {
+        for (EquipmentSlot slot : SLOTS) {
             Multimap<Attribute, AttributeModifier> modifiers = stack.getAttributeModifiers(Objects.requireNonNull(slot));
             for (Attribute attribute : modifiers.keySet()) {
-                if (attribute != null && attribute.getDescriptionId() != null) {
-                    activeAttributeNames.add(
-                        Component.translatable(Objects.requireNonNull(attribute.getDescriptionId()))
-                            .getString().toLowerCase(Locale.ROOT)
-                    );
+                String translated = getTranslatedAttributeName(attribute);
+                if (!translated.isEmpty()) {
+                    activeAttributeNames.add(translated);
                 }
             }
         }
@@ -210,13 +229,7 @@ public class AttributeTooltipEventHandler {
             String text = tooltips.get(i).getString();
 
             // Check and mark slot headers
-            boolean isHeader = false;
-            for (String header : slotHeaders) {
-                if (text.equals(header)) {
-                    isHeader = true;
-                    break;
-                }
-            }
+            boolean isHeader = SLOT_HEADERS.contains(text);
 
             if (isHeader) {
                 linesToRemove.add(i);
@@ -229,7 +242,7 @@ public class AttributeTooltipEventHandler {
             }
 
             // Check and mark existing attribute value lines
-            Matcher matcher = ATTRIBUTE_LINE_PATTERN.matcher(text);
+            Matcher matcher = ATTRIBUTE_MATCHER.get().reset(text);
             if (matcher.matches()) {
                 String remainder = matcher.group(1).toLowerCase(Locale.ROOT).trim();
                 for (String activeName : activeAttributeNames) {
@@ -237,7 +250,7 @@ public class AttributeTooltipEventHandler {
                         linesToRemove.add(i);
                         if (i > 0 && tooltips.get(i - 1).getString().trim().isEmpty()) {
                             if (i - 1 > 0 && (tooltips.get(i - 2).getString().startsWith(" ")
-                                    || slotHeaders.contains(tooltips.get(i - 2).getString()))) {
+                                    || SLOT_HEADERS.contains(tooltips.get(i - 2).getString()))) {
                                 if (!linesToRemove.contains(i - 1)) {
                                     linesToRemove.add(i - 1);
                                 }
@@ -261,7 +274,7 @@ public class AttributeTooltipEventHandler {
         Set<String> processedAttributes = new HashSet<>();
         List<Component> newTooltipLines = new ArrayList<>();
 
-        for (EquipmentSlot slot : EquipmentSlot.values()) {
+        for (EquipmentSlot slot : SLOTS) {
             Multimap<Attribute, AttributeModifier> modifiers = stack.getAttributeModifiers(Objects.requireNonNull(slot));
             if (modifiers.isEmpty()) {
                 continue;

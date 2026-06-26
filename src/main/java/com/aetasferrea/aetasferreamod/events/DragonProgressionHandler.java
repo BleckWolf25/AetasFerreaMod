@@ -12,13 +12,11 @@
  * before they have completed the End Dragon kill advancement.
  *
  * @since 20/05/2026
- * @updated 08/06/2026
+ * @updated 25/06/2026
  */
 // ---------- PACKAGE
 package com.aetasferrea.aetasferreamod.events;
 
-// ---------- IMPORTS
-import com.aetasferrea.aetasferreamod.AetasFerreaMod;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -26,11 +24,10 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
 // ---------- CLASS: DRAGON PROGRESSION HANDLER
-@Mod.EventBusSubscriber(modid = AetasFerreaMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+
 public class DragonProgressionHandler {
 
     // Cache the heavy objects so they are only instantiated once when the mod loads
@@ -41,7 +38,7 @@ public class DragonProgressionHandler {
     @SubscribeEvent
     @SuppressWarnings("null")
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        // Use Phase.START so we intercept the item before the player's client has a chance to click it this tick
+        // Intercept the item before the player's client has a chance to click it this tick
         if (event.phase == TickEvent.Phase.END || event.player.level().isClientSide || !(event.player instanceof ServerPlayer serverPlayer)) return;
 
         if (serverPlayer.containerMenu instanceof net.minecraft.world.inventory.SmithingMenu smithingMenu) {

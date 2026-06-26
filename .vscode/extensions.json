@@ -1,0 +1,8 @@
+{
+    // Don't forget to install and setup properly JDK 17 from Adoptium (https://adoptium.net/temurin/releases?version=17&os=any&arch=any)
+    "recommendations": [
+		"vscjava.vscode-java-pack",
+        "Pleiades.java-extension-pack-jdk",
+        "vscjava.vscode-java-debug"
+	]
+}

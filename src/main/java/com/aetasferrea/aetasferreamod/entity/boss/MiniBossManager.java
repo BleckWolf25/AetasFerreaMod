@@ -12,7 +12,7 @@
  * (e.g., Catena-Mail Vigil, Defiled Castellan, Dead Iron Knight, Diamond Knight) based on the world age (days).
  *
  * @since 20/05/2026
- * @updated 08/06/2026
+ * @updated 25/06/2026
  */
 // ---------- PACKAGE
 package com.aetasferrea.aetasferreamod.entity.boss;
@@ -44,13 +44,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 import java.util.List;
 
 @SuppressWarnings("null")
 // ---------- CLASS: MINI BOSS MANAGER
-@Mod.EventBusSubscriber(modid = "aetasferreamod")
+
 public class MiniBossManager {
 
     // ---------- TICK EVENT HANDLER (SPAWN SCHEDULER)

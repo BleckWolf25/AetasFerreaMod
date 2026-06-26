@@ -8,8 +8,7 @@
     "PufferfishMixin",
     "FoxMixin",
     "SquidMixin",
-    "ChickenMixin",
-    "LivingEntityMixin"
+    "ChickenMixin"
   ],
   "client": [
   ],

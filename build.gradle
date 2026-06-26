@@ -1,11 +1,15 @@
+// ---------- GRADLE PLUGINS
 plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
     id 'org.spongepowered.mixin' version '0.7.+'
+    id 'com.modrinth.minotaur' version '2.8.7'
+    id 'net.darkhax.curseforgegradle' version '1.1.24'
 }
 
+// ---------- GRADLE SETTINGS
 version = mod_version
 group = mod_group_id
 
@@ -17,6 +21,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
 
+// ---------- MINECRAFT SETTINGS
 minecraft {
     mappings channel: mapping_channel, version: mapping_version
     copyIdeResources = true
@@ -49,6 +54,13 @@ minecraft {
 
         gameTestServer {
             property 'forge.enabledGameTestNamespaces', mod_id
+            ideaModule "${project.name}.test"
+            mods {
+                "${mod_id}" {
+                    source sourceSets.main
+                    source sourceSets.test
+                }
+            }
         }
 
         data {
@@ -58,6 +70,7 @@ minecraft {
     }
 }
 
+// ---------- MIXING SETTINGS
 mixin {
     add sourceSets.main, "${mod_id}.refmap.json"
     config "${mod_id}.mixins.json"
@@ -65,10 +78,14 @@ mixin {
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
+// ---------- REPOSITORIES
 repositories {
     maven {
         name = 'Sponge / Mixin'
         url = 'https://repo.spongepowered.org/repository/maven-public/'
+        content {
+            includeGroup "org.spongepowered"
+        }
     }
     maven {
         url = "https://cursemaven.com"
@@ -78,38 +95,73 @@ repositories {
     }
     maven {
         url = "https://maven.blamejared.com"
+        content {
+            includeGroup "com.blamejared.controlling"
+            includeGroup "com.blamejared.searchables"
+        }
+    }
+    maven {
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven"
+        content {
+            includeGroup "maven.modrinth"
+        }
+    }
+    maven {
+        url = "https://maven.shedaniel.me/"
+        content {
+            includeGroup "me.shedaniel.cloth"
+        }
+    }
+    maven {
+        url = "https://maven.kosmx.dev/"
+        content {
+            includeGroup "dev.kosmx.player-anim"
+        }
     }
 }
 
+// ---------- DEPENDENCIES
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     // Jade Integration
-    implementation fg.deobf("curse.maven:jade-324717:5390389")
+    implementation fg.deobf(libs.jade.get())
 
     // Farmer's Delight
-    implementation fg.deobf("curse.maven:farmers-delight-398521:7801523")
+    implementation fg.deobf(libs.farmers.delight.get())
 
     // Spartan Weaponry
-    implementation fg.deobf("curse.maven:spartan-weaponry-278141:6842571")
+    implementation fg.deobf(libs.spartan.weaponry.get())
 
     // Enhanced AI
-    compileOnly fg.deobf("curse.maven:enhanced-ai-515276:7360784")
+    compileOnly fg.deobf(libs.enhanced.ai.get())
     
     // Combat Roll
-    compileOnly fg.deobf("curse.maven:combat-roll-678036:5625925")
+    compileOnly fg.deobf(libs.combat.roll.get())
     
     // Better Combat
-    compileOnly fg.deobf("curse.maven:better-combat-639842:4685418")
+    compileOnly fg.deobf(libs.better.combat.get())
     
     // Controlling
-    implementation fg.deobf("com.blamejared.controlling:Controlling-forge-1.20.1:12.0.2")
+    implementation fg.deobf(libs.controlling.get())
     
     // Searchables (Required by Controlling)
-    implementation fg.deobf("com.blamejared.searchables:Searchables-forge-1.20.1:1.0.2")
+    implementation fg.deobf(libs.searchables.get())
+
+    // Transitively required by compileOnly dependencies (for VSCode/IDE classpath support)
+    compileOnly fg.deobf(libs.cloth.config.get())
+    compileOnly fg.deobf(libs.player.anim.get())
+    compileOnly fg.deobf(libs.insanelib.get())
+
+    // Testing Dependencies
+    testImplementation libs.junit.jupiter.api
+    testRuntimeOnly libs.junit.jupiter.engine
+    testImplementation libs.mockito.core
 }
 
+// ---------- RESOURCES
 tasks.named('processResources', ProcessResources).configure {
     var replaceProperties = [
             minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
@@ -125,6 +177,7 @@ tasks.named('processResources', ProcessResources).configure {
     }
 }
 
+// ---------- JAR CONFIGURATION
 tasks.named('jar', Jar).configure {
     manifest {
         attributes([
@@ -140,6 +193,17 @@ tasks.named('jar', Jar).configure {
     finalizedBy 'reobfJar'
 }
 
+// ---------- JAVA COMPILATION
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+// ---------- TESTING
+test {
+    useJUnitPlatform()
+}
+
+// ---------- PUBLISHING
 publishing {
     publications {
         register('mavenJava', MavenPublication) {
@@ -153,6 +217,24 @@ publishing {
     }
 }
 
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8'
+// Modrinth Publishing Configuration
+modrinth {
+    token = System.getenv("MODRINTH_TOKEN") ?: ""
+    projectId = "aetas-ferrea-lib"
+    versionNumber = project.version
+    versionType = "release"
+    uploadFile = jar
+    gameVersions = [minecraft_version]
+    loaders = ["forge"]
+}
+
+// CurseForge Publishing Configuration
+task publishCurseForge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
+    apiToken = System.getenv("CURSEFORGE_TOKEN") ?: ""
+    def projectId = "123456" // Replace with your numeric CurseForge project ID
+    def mainFile = upload(projectId, jar)
+    mainFile.changelog = "Release ${project.version}"
+    mainFile.releaseType = 'release'
+    mainFile.addGameVersion(minecraft_version)
+    mainFile.addJavaVersion('Java 17')
 }

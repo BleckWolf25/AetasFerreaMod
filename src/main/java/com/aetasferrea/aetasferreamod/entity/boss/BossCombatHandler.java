@@ -12,7 +12,7 @@
  * knockback, armor shedding, loot drops, AI pathfinding adjustments, guard summoning, and despawn rules.
  *
  * @since 20/05/2026
- * @updated 08/06/2026
+ * @updated 25/06/2026
  */
 // ---------- PACKAGE
 package com.aetasferrea.aetasferreamod.entity.boss;
@@ -44,11 +44,10 @@ import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.event.entity.living.ShieldBlockEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
 @SuppressWarnings("null")
 // ---------- CLASS: BOSS COMBAT HANDLER
-@Mod.EventBusSubscriber(modid = "aetasferreamod")
+
 public class BossCombatHandler {
 
     // ---------- LIVING DAMAGE LOGIC (CUSTOM MECHANICS)

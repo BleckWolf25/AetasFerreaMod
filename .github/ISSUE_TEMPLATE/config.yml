@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Discord Community
+    url: https://discord.gg/evhMuYeSYJ
+    about: Join our Discord server to discuss mechanics, get help, or talk with other players!
+  - name: Security Vulnerability
+    url: https://github.com/BleckWolf25/AetasFerreaMod/blob/main/SECURITY.md
+    about: If you found a security vulnerability, please report it following our Security Policy.

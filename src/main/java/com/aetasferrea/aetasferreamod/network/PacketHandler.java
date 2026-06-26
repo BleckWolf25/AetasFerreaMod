@@ -12,9 +12,8 @@
  * all packet types with their encoder, decoder, and handler bindings.
  *
  * @since 20/05/2026
- * @updated 24/06/2026
+ * @updated 25/06/2026
  */
-
 // ---------- PACKAGE
 package com.aetasferrea.aetasferreamod.network;
 
@@ -43,9 +42,8 @@ public class PacketHandler {
     public static void register() {
         int id = 0;
         INSTANCE.messageBuilder(WalkModePacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
-                .encoder(WalkModePacket::toBytes)
-                .decoder(WalkModePacket::new)
-                // consumerMainThread ensures entity state changes execute on the server thread
+                .encoder((packet, buf) -> packet.toBytes(buf))
+                .decoder(buf -> new WalkModePacket(buf))
                 .consumerMainThread(WalkModePacket::handle)
                 .add();
     }

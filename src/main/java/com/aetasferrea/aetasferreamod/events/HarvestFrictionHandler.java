@@ -12,13 +12,12 @@
  * using knives to chop logs as a slow alternative to axes, and applying high durability penalties to wrong tools.
  *
  * @since 20/05/2026
- * @updated 08/06/2026
+ * @updated 25/06/2026
  */
 // ---------- PACKAGE
 package com.aetasferrea.aetasferreamod.events;
 
-// ---------- IMPORTS
-import com.aetasferrea.aetasferreamod.AetasFerreaMod;
+import com.aetasferrea.aetasferreamod.AetasFerreaConfig;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -41,11 +40,9 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
 @SuppressWarnings("null")
 // ---------- CLASS: HARVEST FRICTION HANDLER
-@Mod.EventBusSubscriber(modid = AetasFerreaMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class HarvestFrictionHandler {
 
     // ---------- CUSTOM HARVEST TAGS
@@ -106,7 +103,9 @@ public class HarvestFrictionHandler {
             player.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 120, 2, false, false));
 
             if (!level.isClientSide) {
-                float strikeDamage = (float) (Math.random() * 0.5 + 0.2);
+                double minDmg = AetasFerreaConfig.PUNCH_WRONG_BLOCK_DMG_MIN.get();
+                double maxDmg = AetasFerreaConfig.PUNCH_WRONG_BLOCK_DMG_MAX.get();
+                float strikeDamage = (float) (Math.random() * (maxDmg - minDmg) + minDmg);
                 LSOCompat.hurt(player, "left_arm", strikeDamage);
                 LSOCompat.hurt(player, "right_arm", strikeDamage);
 
@@ -114,9 +113,10 @@ public class HarvestFrictionHandler {
                 player.setHealth(Math.max(1.0f, targetHealth));
 
                 // Display hand notice warning
-                if (!player.getPersistentData().getBoolean("handInjuryNotice")) {
+                long gameTime = level.getGameTime();
+                if (gameTime - player.getPersistentData().getLong("handInjuryNoticeCooldown") >= 60L) {
                     player.displayClientMessage(Component.translatable("message.aetasferreamod.harvest.punch_hard").withStyle(ChatFormatting.RED), true);
-                    player.getPersistentData().putBoolean("handInjuryNotice", true);
+                    player.getPersistentData().putLong("handInjuryNoticeCooldown", gameTime);
                 }
 
                 level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.PLAYER_ATTACK_WEAK, SoundSource.PLAYERS, 0.5f, 0.8f);
@@ -143,7 +143,7 @@ public class HarvestFrictionHandler {
         // CASE A: Chopping logs with a Knife (Allowed but damages knife durability heavily)
         if (context.isKnifeChop) {
             if (!level.isClientSide) {
-                executeDurabilityDamage(player, item, 20);
+                executeDurabilityDamage(player, item, AetasFerreaConfig.KNIFE_CHOP_DURABILITY_DMG.get());
                 level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ZOMBIE_ATTACK_WOODEN_DOOR, SoundSource.PLAYERS, 0.4f, 1.4f);
             }
             return;
@@ -153,7 +153,9 @@ public class HarvestFrictionHandler {
         if (!context.isValid) {
             if (!level.isClientSide) {
                 // Apply major limb trauma
-                float dynamicDamage = (float) (Math.random() * 1.5 + 1.0);
+                double minDmg = AetasFerreaConfig.MINE_WRONG_TOOL_DMG_MIN.get();
+                double maxDmg = AetasFerreaConfig.MINE_WRONG_TOOL_DMG_MAX.get();
+                float dynamicDamage = (float) (Math.random() * (maxDmg - minDmg) + minDmg);
                 LSOCompat.hurt(player, "left_arm", dynamicDamage);
                 LSOCompat.hurt(player, "right_arm", dynamicDamage);
 
@@ -162,13 +164,14 @@ public class HarvestFrictionHandler {
 
                 // Take durability damage on incorrect tools
                 if (!item.isEmpty() && item.isDamageableItem()) {
-                    executeDurabilityDamage(player, item, 24);
+                    executeDurabilityDamage(player, item, AetasFerreaConfig.WRONG_TOOL_DURABILITY_DMG.get());
                 }
 
                 // Display major hand injury warning
-                if (!player.getPersistentData().getBoolean("handInjuryNoticeMajor")) {
+                long gameTime = level.getGameTime();
+                if (gameTime - player.getPersistentData().getLong("handInjuryNoticeMajorCooldown") >= 60L) {
                     player.displayClientMessage(Component.translatable("message.aetasferreamod.harvest.wrong_tools").withStyle(ChatFormatting.RED), true);
-                    player.getPersistentData().putBoolean("handInjuryNoticeMajor", true);
+                    player.getPersistentData().putLong("handInjuryNoticeMajorCooldown", gameTime);
                 }
 
                 // Particles and broken bone sounds

@@ -40,4 +40,5 @@ public class ChickenMixin {
         // Apply normal slow falling drag multipliers
         return instance.multiply(x, y, z);
     }
+
 }

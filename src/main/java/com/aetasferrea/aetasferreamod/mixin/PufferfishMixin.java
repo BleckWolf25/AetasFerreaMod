@@ -19,6 +19,7 @@
 package com.aetasferrea.aetasferreamod.mixin;
 
 // ---------- IMPORTS
+import com.aetasferrea.aetasferreamod.AetasFerreaConfig;
 import net.minecraft.world.entity.animal.Pufferfish;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -65,9 +66,9 @@ public abstract class PufferfishMixin {
         // ---------- STAMINA MONITORING (Increment inflation time or recover stamina)
         if (this.getPuffState() == Pufferfish.STATE_FULL) {
             this.timeFullyPuffed++;
-            // Apply exhaustion cooldown after ten seconds of continuous full inflation
-            if (this.timeFullyPuffed >= 200) {
-                this.puffExhaustionTimer = 600;
+            // Apply exhaustion cooldown after configured time of continuous full inflation
+            if (this.timeFullyPuffed >= AetasFerreaConfig.PUFFERFISH_INFLATION_TICKS.get()) {
+                this.puffExhaustionTimer = AetasFerreaConfig.PUFFERFISH_COOLDOWN_TICKS.get();
                 this.timeFullyPuffed = 0;
             }
         } else {

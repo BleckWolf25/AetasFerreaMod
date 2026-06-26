@@ -1,0 +1,68 @@
+{
+  "values": [
+    {
+      "id": "minecraft:stone_sword",
+      "required": false
+    },
+    {
+      "id": "minecraft:stone_axe",
+      "required": false
+    },
+    {
+      "id": "minecraft:stone_pickaxe",
+      "required": false
+    },
+    {
+      "id": "minecraft:stone_shovel",
+      "required": false
+    },
+    {
+      "id": "minecraft:stone_hoe",
+      "required": false
+    },
+    {
+      "id": "spartanweaponry:stone_dagger",
+      "required": false
+    },
+    {
+      "id": "spartanweaponry:stone_parrying_dagger",
+      "required": false
+    },
+    {
+      "id": "spartanweaponry:stone_longsword",
+      "required": false
+    },
+    {
+      "id": "spartanweaponry:stone_greatsword",
+      "required": false
+    },
+    {
+      "id": "spartanweaponry:stone_warhammer",
+      "required": false
+    },
+    {
+      "id": "spartanweaponry:stone_halberd",
+      "required": false
+    },
+    {
+      "id": "spartanweaponry:stone_pike",
+      "required": false
+    },
+    {
+      "id": "spartanweaponry:stone_lance",
+      "required": false
+    },
+    {
+      "id": "spartanweaponry:stone_battleaxe",
+      "required": false
+    },
+    {
+      "id": "spartanweaponry:stone_flanged_mace",
+      "required": false
+    },
+    {
+      "id": "farmersdelight:flint_knife",
+      "required": false
+    }
+  ]
+}

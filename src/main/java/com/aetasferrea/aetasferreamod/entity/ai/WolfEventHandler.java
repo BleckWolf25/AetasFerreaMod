@@ -12,7 +12,7 @@
  * pack defense/retreat mechanics, dynamic health adjustments, pack size limits, and threat targeting.
  *
  * @since 20/05/2026
- * @updated 08/06/2026
+ * @updated 25/06/2026
  */
 // ---------- PACKAGE
 package com.aetasferrea.aetasferreamod.entity.ai;
@@ -44,7 +44,6 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
@@ -53,7 +52,7 @@ import java.util.UUID;
 
 @SuppressWarnings("null")
 // ---------- CLASS: WOLF EVENT HANDLER
-@Mod.EventBusSubscriber(modid = "aetasferreamod")
+
 public class WolfEventHandler {
 
     // ---------- CONSTANTS & CONFIGURATION

@@ -1,0 +1,68 @@
+{
+  "values": [
+    {
+      "id": "minecraft:diamond_sword",
+      "required": false
+    },
+    {
+      "id": "minecraft:diamond_axe",
+      "required": false
+    },
+    {
+      "id": "minecraft:diamond_pickaxe",
+      "required": false
+    },
+    {
+      "id": "minecraft:diamond_shovel",
+      "required": false
+    },
+    {
+      "id": "minecraft:diamond_hoe",
+      "required": false
+    },
+    {
+      "id": "spartanweaponry:diamond_dagger",
+      "required": false
+    },
+    {
+      "id": "spartanweaponry:diamond_parrying_dagger",
+      "required": false
+    },
+    {
+      "id": "spartanweaponry:diamond_longsword",
+      "required": false
+    },
+    {
+      "id": "spartanweaponry:diamond_greatsword",
+      "required": false
+    },
+    {
+      "id": "spartanweaponry:diamond_warhammer",
+      "required": false
+    },
+    {
+      "id": "spartanweaponry:diamond_halberd",
+      "required": false
+    },
+    {
+      "id": "spartanweaponry:diamond_pike",
+      "required": false
+    },
+    {
+      "id": "spartanweaponry:diamond_lance",
+      "required": false
+    },
+    {
+      "id": "spartanweaponry:diamond_battleaxe",
+      "required": false
+    },
+    {
+      "id": "spartanweaponry:diamond_flanged_mace",
+      "required": false
+    },
+    {
+      "id": "farmersdelight:diamond_knife",
+      "required": false
+    }
+  ]
+}

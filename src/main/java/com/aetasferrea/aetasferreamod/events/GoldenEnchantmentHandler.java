@@ -20,7 +20,6 @@ package com.aetasferrea.aetasferreamod.events;
 
 // ---------- IMPORTS
 import com.aetasferrea.aetasferreamod.AetasFerreaConfig;
-import com.aetasferrea.aetasferreamod.AetasFerreaMod;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
@@ -37,10 +36,9 @@ import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.GrindstoneEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
 // ---------- CLASS: GOLDEN ENCHANTMENT HANDLER
-@Mod.EventBusSubscriber(modid = AetasFerreaMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+
 public class GoldenEnchantmentHandler {
 
     // ---------- CONSTANTS & NBT TAG KEYS

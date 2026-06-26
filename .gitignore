@@ -1,25 +1,55 @@
-# eclipse
-bin
+# Eclipse
+bin/
 *.launch
-.settings
-.metadata
+.settings/
+.metadata/
 .classpath
 .project
 
-# idea
-out
+eclipse/
+
+# IntelliJ IDEA
+out/
 *.ipr
 *.iws
 *.iml
-.idea
+.idea/
 
-# gradle
-build
-.gradle
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
+.gradle-task-name-cache
+gradle-app.setting
 
-# other
-eclipse
-run
+# Java
+*.class
+*.log
+hs_err_pid*
+*.ctxt
+*.hprof
+*.war
+*.ear
+*.nar
+*.orig
+*.rej
+
+# Minecraft / Forge runtime artifacts
+run/
+logs/
+crash-reports/
+screenshots/
+saves/
+usercache.json
+usernamecache.json
+options.txt
+*.dat_old
+*.lock
+
+# Other
+*.tmp
+*~
 
 # Files from Forge MDK
 forge*changelog.txt

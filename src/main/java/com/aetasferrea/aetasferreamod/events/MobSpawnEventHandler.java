@@ -19,7 +19,7 @@ package com.aetasferrea.aetasferreamod.events;
 
 // ---------- IMPORTS
 import java.util.Objects;
-import com.aetasferrea.aetasferreamod.AetasFerreaMod;
+import com.aetasferrea.aetasferreamod.AetasFerreaConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.tags.BiomeTags;
@@ -32,10 +32,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
 // ---------- CLASS: MOBSPAWNEVENTHANDLER
-@Mod.EventBusSubscriber(modid = AetasFerreaMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class MobSpawnEventHandler {
 
     // ---------- MOB SPAWN POSITION CHECK
@@ -53,8 +51,8 @@ public class MobSpawnEventHandler {
 
         // ---------- SPIDERS (Surface biome validation)
         if (entity instanceof Spider) {
-            // Check if it is a surface spawn roughly at or above Y 60
-            if (pos.getY() >= 60) {
+            // Check if it is a surface spawn roughly at or above configured Y
+            if (pos.getY() >= AetasFerreaConfig.SPIDER_SURFACE_Y.get()) {
                 boolean isValidBiome = biome.is(Objects.requireNonNull(BiomeTags.IS_FOREST)) || biome.is(Objects.requireNonNull(BiomeTags.IS_JUNGLE));
                 if (!isValidBiome) {
                     event.setResult(Event.Result.DENY);

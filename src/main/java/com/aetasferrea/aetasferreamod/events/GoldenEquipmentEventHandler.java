@@ -19,7 +19,6 @@ package com.aetasferrea.aetasferreamod.events;
 
 // ---------- IMPORTS
 import com.aetasferrea.aetasferreamod.AetasFerreaConfig;
-import com.aetasferrea.aetasferreamod.AetasFerreaMod;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -27,13 +26,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.ItemAttributeModifierEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-
 import java.util.Objects;
 import java.util.UUID;
 
 // ---------- CLASS: GoldenEquipmentEventHandler
-@Mod.EventBusSubscriber(modid = AetasFerreaMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+
 public class GoldenEquipmentEventHandler {
 
     // ---------- CONSTANTS

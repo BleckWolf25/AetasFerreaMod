@@ -13,13 +13,11 @@
  * updates (e.g. movement speed penalties and knockback boosts).
  *
  * @since 20/05/2026
- * @updated 08/06/2026
+ * @updated 25/06/2026
  */
 // ---------- PACKAGE
 package com.aetasferrea.aetasferreamod.events;
 
-// ---------- IMPORTS
-import com.aetasferrea.aetasferreamod.AetasFerreaMod;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -34,14 +32,13 @@ import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.GrindstoneEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 import java.util.Map;
 import java.util.UUID;
 
 @SuppressWarnings("null")
 // ---------- CLASS: FANTASY ARMOR HANDLER
-@Mod.EventBusSubscriber(modid = AetasFerreaMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+
 public class FantasyArmorHandler {
 
     // ---------- ATTRIBUTE MODIFIER UUIDS

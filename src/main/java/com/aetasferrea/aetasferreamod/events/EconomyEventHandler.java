@@ -20,7 +20,7 @@ package com.aetasferrea.aetasferreamod.events;
 
 // ---------- IMPORTS
 import static java.util.Objects.requireNonNull;
-import com.aetasferrea.aetasferreamod.AetasFerreaMod;
+import com.aetasferrea.aetasferreamod.AetasFerreaConfig;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -34,49 +34,66 @@ import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.event.village.WandererTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import java.util.List;
 import javax.annotation.Nonnull;
 
 // ---------- CLASS: ECONOMYEVENTHANDLER
-@Mod.EventBusSubscriber(modid = AetasFerreaMod.MODID)
 public class EconomyEventHandler {
+
+    // ---------- FIELDS
+    private static final java.util.Map<Item, Item> PROGRESSION_MAP = new java.util.HashMap<>();
+
+    // ---------- STATIC INITIALIZATION
+    static {
+        // Armor Tiers
+        PROGRESSION_MAP.put(Items.CHAINMAIL_HELMET, Items.LEATHER_HELMET);
+        PROGRESSION_MAP.put(Items.GOLDEN_HELMET, Items.LEATHER_HELMET);
+        PROGRESSION_MAP.put(Items.CHAINMAIL_CHESTPLATE, Items.LEATHER_CHESTPLATE);
+        PROGRESSION_MAP.put(Items.GOLDEN_CHESTPLATE, Items.LEATHER_CHESTPLATE);
+        PROGRESSION_MAP.put(Items.CHAINMAIL_LEGGINGS, Items.LEATHER_LEGGINGS);
+        PROGRESSION_MAP.put(Items.GOLDEN_LEGGINGS, Items.LEATHER_LEGGINGS);
+        PROGRESSION_MAP.put(Items.CHAINMAIL_BOOTS, Items.LEATHER_BOOTS);
+        PROGRESSION_MAP.put(Items.GOLDEN_BOOTS, Items.LEATHER_BOOTS);
+
+        PROGRESSION_MAP.put(Items.IRON_HELMET, Items.CHAINMAIL_HELMET);
+        PROGRESSION_MAP.put(Items.DIAMOND_HELMET, Items.CHAINMAIL_HELMET);
+        PROGRESSION_MAP.put(Items.IRON_CHESTPLATE, Items.CHAINMAIL_CHESTPLATE);
+        PROGRESSION_MAP.put(Items.DIAMOND_CHESTPLATE, Items.CHAINMAIL_CHESTPLATE);
+        PROGRESSION_MAP.put(Items.IRON_LEGGINGS, Items.CHAINMAIL_LEGGINGS);
+        PROGRESSION_MAP.put(Items.DIAMOND_LEGGINGS, Items.CHAINMAIL_LEGGINGS);
+        PROGRESSION_MAP.put(Items.IRON_BOOTS, Items.CHAINMAIL_BOOTS);
+        PROGRESSION_MAP.put(Items.DIAMOND_BOOTS, Items.CHAINMAIL_BOOTS);
+
+        // Tool / Weapon Tiers
+        PROGRESSION_MAP.put(Items.STONE_SWORD, Items.WOODEN_SWORD);
+        PROGRESSION_MAP.put(Items.IRON_SWORD, Items.STONE_SWORD);
+        PROGRESSION_MAP.put(Items.GOLDEN_SWORD, Items.STONE_SWORD);
+        PROGRESSION_MAP.put(Items.DIAMOND_SWORD, Items.IRON_SWORD);
+
+        PROGRESSION_MAP.put(Items.STONE_AXE, Items.WOODEN_AXE);
+        PROGRESSION_MAP.put(Items.IRON_AXE, Items.STONE_AXE);
+        PROGRESSION_MAP.put(Items.GOLDEN_AXE, Items.STONE_AXE);
+        PROGRESSION_MAP.put(Items.DIAMOND_AXE, Items.IRON_AXE);
+
+        PROGRESSION_MAP.put(Items.STONE_PICKAXE, Items.WOODEN_PICKAXE);
+        PROGRESSION_MAP.put(Items.IRON_PICKAXE, Items.STONE_PICKAXE);
+        PROGRESSION_MAP.put(Items.GOLDEN_PICKAXE, Items.STONE_PICKAXE);
+        PROGRESSION_MAP.put(Items.DIAMOND_PICKAXE, Items.IRON_PICKAXE);
+
+        PROGRESSION_MAP.put(Items.STONE_SHOVEL, Items.WOODEN_SHOVEL);
+        PROGRESSION_MAP.put(Items.IRON_SHOVEL, Items.STONE_SHOVEL);
+        PROGRESSION_MAP.put(Items.GOLDEN_SHOVEL, Items.STONE_SHOVEL);
+        PROGRESSION_MAP.put(Items.DIAMOND_SHOVEL, Items.IRON_SHOVEL);
+
+        PROGRESSION_MAP.put(Items.STONE_HOE, Items.WOODEN_HOE);
+        PROGRESSION_MAP.put(Items.IRON_HOE, Items.STONE_HOE);
+        PROGRESSION_MAP.put(Items.GOLDEN_HOE, Items.STONE_HOE);
+        PROGRESSION_MAP.put(Items.DIAMOND_HOE, Items.IRON_HOE);
+    }
 
     // ---------- MATERIAL PROGRESSION LOOKUP
     private static Item getPreviousTierItem(Item item) {
-        // Armor Tiers
-        if (item == Items.CHAINMAIL_HELMET || item == Items.GOLDEN_HELMET) return Items.LEATHER_HELMET;
-        if (item == Items.CHAINMAIL_CHESTPLATE || item == Items.GOLDEN_CHESTPLATE) return Items.LEATHER_CHESTPLATE;
-        if (item == Items.CHAINMAIL_LEGGINGS || item == Items.GOLDEN_LEGGINGS) return Items.LEATHER_LEGGINGS;
-        if (item == Items.CHAINMAIL_BOOTS || item == Items.GOLDEN_BOOTS) return Items.LEATHER_BOOTS;
-
-        if (item == Items.IRON_HELMET || item == Items.DIAMOND_HELMET) return Items.CHAINMAIL_HELMET;
-        if (item == Items.IRON_CHESTPLATE || item == Items.DIAMOND_CHESTPLATE) return Items.CHAINMAIL_CHESTPLATE;
-        if (item == Items.IRON_LEGGINGS || item == Items.DIAMOND_LEGGINGS) return Items.CHAINMAIL_LEGGINGS;
-        if (item == Items.IRON_BOOTS || item == Items.DIAMOND_BOOTS) return Items.CHAINMAIL_BOOTS;
-
-        // Tool / Weapon Tiers
-        if (item == Items.STONE_SWORD) return Items.WOODEN_SWORD;
-        if (item == Items.IRON_SWORD || item == Items.GOLDEN_SWORD) return Items.STONE_SWORD;
-        if (item == Items.DIAMOND_SWORD) return Items.IRON_SWORD;
-
-        if (item == Items.STONE_AXE) return Items.WOODEN_AXE;
-        if (item == Items.IRON_AXE || item == Items.GOLDEN_AXE) return Items.STONE_AXE;
-        if (item == Items.DIAMOND_AXE) return Items.IRON_AXE;
-
-        if (item == Items.STONE_PICKAXE) return Items.WOODEN_PICKAXE;
-        if (item == Items.IRON_PICKAXE || item == Items.GOLDEN_PICKAXE) return Items.STONE_PICKAXE;
-        if (item == Items.DIAMOND_PICKAXE) return Items.IRON_PICKAXE;
-
-        if (item == Items.STONE_SHOVEL) return Items.WOODEN_SHOVEL;
-        if (item == Items.IRON_SHOVEL || item == Items.GOLDEN_SHOVEL) return Items.STONE_SHOVEL;
-        if (item == Items.DIAMOND_SHOVEL) return Items.IRON_SHOVEL;
-
-        if (item == Items.STONE_HOE) return Items.WOODEN_HOE;
-        if (item == Items.IRON_HOE || item == Items.GOLDEN_HOE) return Items.STONE_HOE;
-        if (item == Items.DIAMOND_HOE) return Items.IRON_HOE;
-
-        return null;
+        return PROGRESSION_MAP.get(item);
     }
 
     // ---------- CURRENCY TIER MAPPING
@@ -213,11 +230,12 @@ public class EconomyEventHandler {
             // ---------- PRICE ADJUSTMENT (Enforce minimum currency cost on armor pieces)
             Item resultItem = result.getItem();
             if (resultItem instanceof ArmorItem) {
-                if (costA.is(requireNonNull(finalCurrency)) && costA.getCount() < 4) {
-                    costA.setCount(4);
+                int minPrice = AetasFerreaConfig.ARMOR_TRADE_MIN_PRICE.get();
+                if (costA.is(requireNonNull(finalCurrency)) && costA.getCount() < minPrice) {
+                    costA.setCount(minPrice);
                 }
-                if (costB.is(requireNonNull(finalCurrency)) && costB.getCount() < 4) {
-                    costB.setCount(4);
+                if (costB.is(requireNonNull(finalCurrency)) && costB.getCount() < minPrice) {
+                    costB.setCount(minPrice);
                 }
             }
 

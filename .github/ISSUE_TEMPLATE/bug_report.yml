@@ -1,0 +1,88 @@
+name: Bug Report
+description: Report a bug to help us improve Aetas Ferrea Mod
+title: "[BUG]: <title>"
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to report a bug! Please fill out the form below as completely as possible to help us diagnose and fix the issue.
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-flight Checklist
+      description: Please verify that you have completed the following steps before submitting your report.
+      options:
+        - label: I am running the latest release of the mod for my Minecraft version.
+          required: true
+        - label: I have checked existing issues to make sure this bug has not been reported already.
+          required: true
+        - label: I am NOT using unsupported optimization or overhaul mods that heavily conflict (e.g. incompatible coremods) without verifying the bug exists on a clean install.
+          required: true
+  - type: dropdown
+    id: mc-version
+    attributes:
+      label: Minecraft Version
+      description: Select the version of Minecraft you are playing on.
+      options:
+        - "1.20.1"
+        - "Other (Please specify in description)"
+    validations:
+      required: true
+  - type: input
+    id: forge-version
+    attributes:
+      label: Forge Version
+      placeholder: "e.g. 47.4.10"
+    validations:
+      required: true
+  - type: input
+    id: mod-version
+    attributes:
+      label: Mod Version
+      placeholder: "e.g. 1.0.0"
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is.
+      placeholder: "What goes wrong?"
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: Explain how we can reproduce the behavior.
+      placeholder: |
+        1. Equip full set of gold armor
+        2. Hit a zombie bare-handed
+        3. Observe ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: A clear and concise description of what you expected to happen.
+      placeholder: "What should have happened?"
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / Crash Reports
+      description: Please paste or link to your `latest.log`, `debug.log`, or crash report. Use pastebin, gist, or a markdown code block here.
+      placeholder: "Link to Pastebin/Gist or paste the relevant log part here..."
+    validations:
+      required: true
+  - type: textarea
+    id: other-mods
+    attributes:
+      label: Other Installed Mods
+      description: List other mods you are running, or note if you are running a specific modpack.
+      placeholder: "e.g. Combat Roll, Mod Menu, etc."
+    validations:
+      required: false

@@ -21,29 +21,27 @@ package com.aetasferrea.aetasferreamod.events;
 import com.aetasferrea.aetasferreamod.AetasFerreaMod;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import java.util.List;
 import java.util.Objects;
-import java.util.Random;
 
 // ---------- CLASS: FISHINGEVENTHANDLER
-@Mod.EventBusSubscriber(modid = AetasFerreaMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class FishingEventHandler {
 
     // ---------- CONSTANTS
-    private static final Random RANDOM = new Random();
-    private static final Item[] JUNK_POOL = {
-        Items.STICK, Items.BONE, Items.LILY_PAD, Items.KELP, Items.LEATHER, Items.STRING, Items.ROTTEN_FLESH
-    };
+    private static final TagKey<Item> JUNK_TAG = ItemTags.create(new ResourceLocation(AetasFerreaMod.MODID, "fishing_junk"));
 
     // ---------- FISH IDENTIFICATION
     private static boolean isFish(Item item) {
@@ -103,7 +101,8 @@ public class FishingEventHandler {
             }
 
             // Replace invalid fish drop with a random item from the junk pool
-            Item junkItem = JUNK_POOL[RANDOM.nextInt(JUNK_POOL.length)];
+            var tag = ForgeRegistries.ITEMS.tags().getTag(JUNK_TAG);
+            Item junkItem = tag.isEmpty() ? Items.STICK : tag.getRandomElement(level.getRandom()).orElse(Items.STICK);
             drops.set(i, new ItemStack(Objects.requireNonNull(junkItem)));
         }
     }

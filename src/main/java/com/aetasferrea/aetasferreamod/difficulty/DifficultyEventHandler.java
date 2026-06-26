@@ -12,7 +12,7 @@
  * Banishment rules and surface caps throttle mob levels in the early days.
  *
  * @since 20/05/2026
- * @updated 24/06/2026
+ * @updated 25/06/2026
  */
 // ---------- PACKAGE
 package com.aetasferrea.aetasferreamod.difficulty;
@@ -40,11 +40,10 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
 
 // ---------- CLASS: DIFFICULTY EVENT HANDLER
-@Mod.EventBusSubscriber(modid = "aetasferreamod")
+
 public class DifficultyEventHandler {
 
     // Cache the weapon array globally to avoid repetitive heap allocation drops during spawn waves

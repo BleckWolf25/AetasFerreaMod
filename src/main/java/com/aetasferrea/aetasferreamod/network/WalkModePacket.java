@@ -8,13 +8,12 @@
  * @summary Client-to-server packet that toggles walk mode on the player's ridden equine.
  *
  * @description
- * Carries no payload data — its receipt alone signals that the sending player wishes to toggle
+ * Carries no payload dataits receipt alone signals that the sending player wishes to toggle
  * walk mode on their currently ridden HorseEventHandler, AetasDonkey, or AetasMule entity.
  *
  * @since 20/05/2026
- * @updated 24/06/2026
+ * @updated 25/06/2026
  */
-
 // ---------- PACKAGE
 package com.aetasferrea.aetasferreamod.network;
 
@@ -35,10 +34,10 @@ public class WalkModePacket {
     // ---------- CONSTRUCTORS
     public WalkModePacket() {}
 
-    // No-op decoder — packet carries no data
+    // No-op decoderpacket carries no data
     public WalkModePacket(FriendlyByteBuf buf) {}
 
-    // No-op encoder — packet carries no data
+    // No-op encoderpacket carries no data
     public void toBytes(FriendlyByteBuf buf) {}
 
     // ---------- SERVER HANDLER

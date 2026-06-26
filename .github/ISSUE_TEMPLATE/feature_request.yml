@@ -1,0 +1,41 @@
+name: Feature Request
+description: Propose a new feature, mechanic, or balance adjustment for Aetas Ferrea Mod
+title: "[Suggestion]: <title>"
+labels: ["enhancement", "suggestion"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have an idea to make Aetas Ferrea Mod even more immersive, realistic, or balanced? We would love to hear it!
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: Feature Description
+      description: A clear and concise description of what the feature, mechanic, or change is.
+      placeholder: "I suggest adding a new mechanic where..."
+    validations:
+      required: true
+  - type: textarea
+    id: problem-solved
+    attributes:
+      label: Problem Statement / Context
+      description: Is your feature request related to a problem or limitation in the mod or vanilla Minecraft? Please describe it.
+      placeholder: "Currently, fighting on horseback feels too..."
+    validations:
+      required: true
+  - type: textarea
+    id: design-ideas
+    attributes:
+      label: Proposed Implementation Details
+      description: Describe your ideas on how this should work (e.g. config options, attribute changes, interaction mechanics).
+      placeholder: "Perhaps this could be implemented by adding a tag..."
+    validations:
+      required: false
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternative Solutions
+      description: Describe any alternative solutions or features you've considered.
+      placeholder: "Another option could be to..."
+    validations:
+      required: false

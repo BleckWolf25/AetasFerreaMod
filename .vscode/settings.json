@@ -1,6 +1,8 @@
 {
     "java.compile.nullAnalysis.mode": "automatic",
-    "todo-tree.ripgrep.ripgrep": "C:\\Users\\joaoc\\AppData\\Local\\Programs\\Microsoft VS Code\\6a44c352bd\\resources\\app\\node_modules\\@vscode\\ripgrep-universal\\bin\\win32-x64\\rg.exe",
+    "todo-tree.ripgrep": "C:\\Users\\joaoc\\AppData\\Local\\Microsoft\\WinGet\\Links\\rg.exe",
     "java.configuration.updateBuildConfiguration": "automatic",
-    "java.jdt.ls.java.home": "C:/Program Files/Eclipse Adoptium/jdk-17.0.19.10-hotspot"
+    "java.jdt.ls.java.home": "C:/Program Files/Eclipse Adoptium/jdk-17.0.19.10-hotspot",
+    "java.import.gradle.java.home": "C:/Program Files/Eclipse Adoptium/jdk-17.0.19.10-hotspot",
+    "java.autobuild.enabled": false
 }

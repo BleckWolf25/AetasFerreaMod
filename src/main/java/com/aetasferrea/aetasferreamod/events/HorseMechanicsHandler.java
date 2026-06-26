@@ -13,14 +13,12 @@
  * when specialization thresholds are reached.
  *
  * @since 20/05/2026
- * @updated 24/06/2026
+ * @updated 25/06/2026
  */
-
 // ---------- PACKAGE
 package com.aetasferrea.aetasferreamod.events;
 
-// ---------- IMPORTS
-import com.aetasferrea.aetasferreamod.AetasFerreaMod;
+import com.aetasferrea.aetasferreamod.AetasFerreaConfig;
 import com.aetasferrea.aetasferreamod.entity.AetasDonkey;
 import com.aetasferrea.aetasferreamod.entity.HorseEventHandler;
 import net.minecraft.ChatFormatting;
@@ -39,10 +37,8 @@ import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
 // ---------- CLASS: HorseMechanicsHandler
-@Mod.EventBusSubscriber(modid = AetasFerreaMod.MODID)
 @SuppressWarnings({"null", "DataFlowIssue"})
 public class HorseMechanicsHandler {
 
@@ -122,21 +118,22 @@ public class HorseMechanicsHandler {
             // ---------- ROUNCEY COMBAT XP (on damage received) ----------
             if (horseClass == HorseEventHandler.CLASS_ROUNCEY) {
                 int combatXP = horse.getCombatXP();
-                if (combatXP < 125 && combatXP != -1) {
+                int combatCap = AetasFerreaConfig.ROUNCEY_COMBAT_XP_CAP.get();
+                if (combatXP < combatCap && combatXP != -1) {
                     long lastDamageXP = horse.getPersistentData().getLong("AetasDamageXPCooldown");
                     long gameTime = horse.tickCount;
                     // 100-tick cooldown prevents XP spam from multi-hit attacks
                     if (gameTime - lastDamageXP >= 100L) {
                         horse.getPersistentData().putLong("AetasDamageXPCooldown", gameTime);
                         int previousXP = combatXP;
-                        combatXP = Math.min(125, combatXP + 10);
+                        combatXP = Math.min(combatCap, combatXP + AetasFerreaConfig.ROUNCEY_COMBAT_HIT_XP.get());
                         horse.setCombatXP(combatXP);
 
-                        if (previousXP < 65 && combatXP >= 65 && horse.getFirstPassenger() instanceof Player rider) {
+                        if (previousXP < combatCap / 2 && combatXP >= combatCap / 2 && horse.getFirstPassenger() instanceof Player rider) {
                             horse.level().playSound(null, horse.blockPosition(), SoundEvents.HORSE_AMBIENT, SoundSource.NEUTRAL, 0.8f, 1.0f);
                             rider.displayClientMessage(Component.translatable("message.aetasferreamod.horse.accustomed_battle").withStyle(ChatFormatting.GRAY), true);
                         }
-                        if (previousXP < 125 && combatXP >= 125) {
+                        if (previousXP < combatCap && combatXP >= combatCap) {
                             horse.level().playSound(null, horse.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 1.0f, 1.0f);
                             if (horse.level() instanceof ServerLevel sl) sl.sendParticles(ParticleTypes.HAPPY_VILLAGER, horse.getX(), horse.getY() + 1.5, horse.getZ(), 5, 0.5, 0.5, 0.5, 0.0);
                             if (horse.getFirstPassenger() instanceof Player rider) {
@@ -150,7 +147,7 @@ public class HorseMechanicsHandler {
             // ---------- RIDER EJECTION (Non-Destrier only) ----------
             if (horseClass != HorseEventHandler.CLASS_DESTRIER && horse.isVehicle() && horse.level() instanceof ServerLevel sl) {
                 // 30% chance to panic and eject rider when hit
-                if (horse.getRandom().nextFloat() < 0.30f) {
+                if (horse.getRandom().nextFloat() < AetasFerreaConfig.HORSE_PANIC_EJECT_CHANCE.get()) {
                     horse.ejectPassengers();
                     horse.makeMad();
                     horse.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 100, 2));
@@ -173,21 +170,22 @@ public class HorseMechanicsHandler {
         // ---------- ROUNCEY COMBAT XP (on attack dealt) ----------
         if (horse.getHorseClass() == HorseEventHandler.CLASS_ROUNCEY) {
             int combatXP = horse.getCombatXP();
-            if (combatXP < 125 && combatXP != -1) {
+            int combatCap = AetasFerreaConfig.ROUNCEY_COMBAT_XP_CAP.get();
+            if (combatXP < combatCap && combatXP != -1) {
                 long lastCombatXP = horse.getPersistentData().getLong("AetasCombatXPCooldown");
                 long gameTime = horse.tickCount;
                 // 60-tick cooldown to prevent rapid XP inflation from quick attacks
                 if (gameTime - lastCombatXP >= 60L) {
                     horse.getPersistentData().putLong("AetasCombatXPCooldown", gameTime);
                     int previousXP = combatXP;
-                    combatXP = Math.min(125, combatXP + 5);
+                    combatXP = Math.min(combatCap, combatXP + AetasFerreaConfig.ROUNCEY_COMBAT_ATTACK_XP.get());
                     horse.setCombatXP(combatXP);
 
-                    if (previousXP < 65 && combatXP >= 65) {
+                    if (previousXP < combatCap / 2 && combatXP >= combatCap / 2) {
                         horse.level().playSound(null, horse.blockPosition(), SoundEvents.HORSE_AMBIENT, SoundSource.NEUTRAL, 0.8f, 1.0f);
                         player.displayClientMessage(Component.translatable("message.aetasferreamod.horse.accustomed_battle").withStyle(ChatFormatting.GRAY), true);
                     }
-                    if (previousXP < 125 && combatXP >= 125) {
+                    if (previousXP < combatCap && combatXP >= combatCap) {
                         horse.level().playSound(null, horse.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 1.0f, 1.0f);
                         if (horse.level() instanceof ServerLevel sl) sl.sendParticles(ParticleTypes.HAPPY_VILLAGER, horse.getX(), horse.getY() + 1.5, horse.getZ(), 5, 0.5, 0.5, 0.5, 0.0);
                         displaySubtitle(player, Component.translatable("message.aetasferreamod.horse.ready_destrier").withStyle(ChatFormatting.GOLD));
@@ -205,16 +203,17 @@ public class HorseMechanicsHandler {
         // ---------- ROUNCEY AGILITY XP (on jump) ----------
         if (horse.getHorseClass() == HorseEventHandler.CLASS_ROUNCEY) {
             int agilityXP = horse.getAgilityXP();
-            if (agilityXP < 150 && agilityXP != -1) {
+            int agilityCap = AetasFerreaConfig.ROUNCEY_AGILITY_XP_CAP.get();
+            if (agilityXP < agilityCap && agilityXP != -1) {
                 int previousXP = agilityXP;
-                agilityXP = Math.min(150, agilityXP + 5);
+                agilityXP = Math.min(agilityCap, agilityXP + AetasFerreaConfig.ROUNCEY_JUMP_XP.get());
                 horse.setAgilityXP(agilityXP);
 
-                if (previousXP < 75 && agilityXP >= 75 && horse.getFirstPassenger() instanceof Player rider) {
+                if (previousXP < agilityCap / 2 && agilityXP >= agilityCap / 2 && horse.getFirstPassenger() instanceof Player rider) {
                     horse.level().playSound(null, horse.blockPosition(), SoundEvents.HORSE_AMBIENT, SoundSource.NEUTRAL, 0.8f, 1.0f);
                     rider.displayClientMessage(Component.translatable("message.aetasferreamod.horse.accustomed_footwork").withStyle(ChatFormatting.GRAY), true);
                 }
-                if (previousXP < 150 && agilityXP >= 150) {
+                if (previousXP < agilityCap && agilityXP >= agilityCap) {
                     horse.level().playSound(null, horse.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 1.0f, 1.0f);
                     if (horse.level() instanceof ServerLevel sl) sl.sendParticles(ParticleTypes.HAPPY_VILLAGER, horse.getX(), horse.getY() + 1.5, horse.getZ(), 5, 0.5, 0.5, 0.5, 0.0);
                     if (horse.getFirstPassenger() instanceof Player rider) {
@@ -236,16 +235,17 @@ public class HorseMechanicsHandler {
         if (horse.getHorseClass() == HorseEventHandler.CLASS_ROUNCEY && throttle > 0.6 && !horse.isHorseSwimming()) {
             if (event.player.tickCount % 20 == 0) {
                 int agilityXP = horse.getAgilityXP();
-                if (agilityXP < 150 && agilityXP != -1) {
+                int agilityCap = AetasFerreaConfig.ROUNCEY_AGILITY_XP_CAP.get();
+                if (agilityXP < agilityCap && agilityXP != -1) {
                     int previousXP = agilityXP;
-                    agilityXP = Math.min(150, agilityXP + 2);
+                    agilityXP = Math.min(agilityCap, agilityXP + AetasFerreaConfig.ROUNCEY_GALLOP_XP.get());
                     horse.setAgilityXP(agilityXP);
 
-                    if (previousXP < 75 && agilityXP >= 75) {
+                    if (previousXP < agilityCap / 2 && agilityXP >= agilityCap / 2) {
                         horse.level().playSound(null, horse.blockPosition(), SoundEvents.HORSE_AMBIENT, SoundSource.NEUTRAL, 0.8f, 1.0f);
                         event.player.displayClientMessage(Component.translatable("message.aetasferreamod.horse.accustomed_footwork").withStyle(ChatFormatting.GRAY), true);
                     }
-                    if (previousXP < 150 && agilityXP >= 150) {
+                    if (previousXP < agilityCap && agilityXP >= agilityCap) {
                         horse.level().playSound(null, horse.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 1.0f, 1.0f);
                         if (horse.level() instanceof ServerLevel sl) sl.sendParticles(ParticleTypes.HAPPY_VILLAGER, horse.getX(), horse.getY() + 1.5, horse.getZ(), 5, 0.5, 0.5, 0.5, 0.0);
                         displaySubtitle(event.player, Component.translatable("message.aetasferreamod.horse.ready_courser").withStyle(ChatFormatting.AQUA));
@@ -259,13 +259,15 @@ public class HorseMechanicsHandler {
             int combatXP = horse.getCombatXP();
             int agilityXP = horse.getAgilityXP();
             int customClass = horse.getHorseClass();
-            if ((combatXP >= 125 && combatXP != -1) || (agilityXP >= 150 && agilityXP != -1)) {
+            int combatCap = AetasFerreaConfig.ROUNCEY_COMBAT_XP_CAP.get();
+            int agilityCap = AetasFerreaConfig.ROUNCEY_AGILITY_XP_CAP.get();
+            if ((combatXP >= combatCap && combatXP != -1) || (agilityXP >= agilityCap && agilityXP != -1)) {
                 if (event.player.tickCount % 60 == 0) {
-                    if (combatXP >= 125 && combatXP != -1 && agilityXP >= 150 && agilityXP != -1) {
+                    if (combatXP >= combatCap && combatXP != -1 && agilityXP >= agilityCap && agilityXP != -1) {
                         event.player.displayClientMessage(Component.translatable("message.aetasferreamod.horse.ready_spec").withStyle(ChatFormatting.GREEN), true);
-                    } else if (customClass == HorseEventHandler.CLASS_ROUNCEY && combatXP >= 125) {
+                    } else if (customClass == HorseEventHandler.CLASS_ROUNCEY && combatXP >= combatCap) {
                         event.player.displayClientMessage(Component.translatable("message.aetasferreamod.horse.ready_spec_destrier").withStyle(ChatFormatting.GREEN), true);
-                    } else if (customClass == HorseEventHandler.CLASS_ROUNCEY && agilityXP >= 150) {
+                    } else if (customClass == HorseEventHandler.CLASS_ROUNCEY && agilityXP >= agilityCap) {
                         event.player.displayClientMessage(Component.translatable("message.aetasferreamod.horse.ready_spec_courser").withStyle(ChatFormatting.GREEN), true);
                     }
                 }

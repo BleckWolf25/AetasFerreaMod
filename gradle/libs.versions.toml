@@ -1,0 +1,30 @@
+[versions]
+jade = "5390389"
+farmersDelight = "7801523"
+spartanWeaponry = "6842571"
+enhancedAi = "7360784"
+combatRoll = "5625925"
+betterCombat = "4685418"
+controlling = "12.0.2"
+searchables = "1.0.2"
+clothConfig = "11.1.106"
+playerAnim = "1.0.2-rc1+1.20"
+insanelib = "Cb8uJKVh"
+junit = "5.9.2"
+mockito = "5.3.1"
+
+[libraries]
+jade = { module = "curse.maven:jade-324717", version.ref = "jade" }
+farmers-delight = { module = "curse.maven:farmers-delight-398521", version.ref = "farmersDelight" }
+spartan-weaponry = { module = "curse.maven:spartan-weaponry-278141", version.ref = "spartanWeaponry" }
+enhanced-ai = { module = "curse.maven:enhanced-ai-515276", version.ref = "enhancedAi" }
+combat-roll = { module = "curse.maven:combat-roll-678036", version.ref = "combatRoll" }
+better-combat = { module = "curse.maven:better-combat-639842", version.ref = "betterCombat" }
+controlling = { module = "com.blamejared.controlling:Controlling-forge-1.20.1", version.ref = "controlling" }
+searchables = { module = "com.blamejared.searchables:Searchables-forge-1.20.1", version.ref = "searchables" }
+cloth-config = { module = "me.shedaniel.cloth:cloth-config-forge", version.ref = "clothConfig" }
+player-anim = { module = "dev.kosmx.player-anim:player-animation-lib-forge", version.ref = "playerAnim" }
+insanelib = { module = "maven.modrinth:insanelib", version.ref = "insanelib" }
+junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
+junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
+mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }

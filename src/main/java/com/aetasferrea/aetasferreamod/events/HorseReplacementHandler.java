@@ -21,7 +21,6 @@ package com.aetasferrea.aetasferreamod.events;
 // ---------- IMPORTS
 import java.util.Objects;
 
-import com.aetasferrea.aetasferreamod.AetasFerreaMod;
 import com.aetasferrea.aetasferreamod.entity.AetasDonkey;
 import com.aetasferrea.aetasferreamod.entity.AetasMule;
 import com.aetasferrea.aetasferreamod.entity.HorseEventHandler;
@@ -33,10 +32,9 @@ import net.minecraft.world.entity.animal.horse.Horse;
 import net.minecraft.world.entity.animal.horse.Mule;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
 // ---------- CLASS: HorseReplacementHandler
-@Mod.EventBusSubscriber(modid = AetasFerreaMod.MODID)
+
 public class HorseReplacementHandler {
 
     // ---------- ENTITY JOIN INTERCEPTION

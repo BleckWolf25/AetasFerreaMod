@@ -239,7 +239,7 @@ public class AetasDonkey extends Donkey {
                 return InteractionResult.PASS;
             }
         } else {
-            // If tamed and we try to place a chest
+            // If tamed and try to place a chest
             if (!this.hasChest() && itemstack.is(Objects.requireNonNull(Items.CHEST))) {
                 this.setChest(true);
                 this.playSound(Objects.requireNonNull(SoundEvents.DONKEY_CHEST), 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);

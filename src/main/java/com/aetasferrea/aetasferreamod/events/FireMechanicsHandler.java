@@ -38,11 +38,10 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
 @SuppressWarnings("null")
 // ---------- CLASS: FIRE MECHANICS HANDLER
-@Mod.EventBusSubscriber(modid = AetasFerreaMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+
 public class FireMechanicsHandler {
 
     // ---------- CUSTOM BURNING ITEMS TAG

@@ -13,7 +13,7 @@
  * armor weight penalties.
  *
  * @since 20/05/2026
- * @updated 24/06/2026
+ * @updated 25/06/2026
  */
 // ---------- PACKAGE
 package com.aetasferrea.aetasferreamod.events;
@@ -47,10 +47,8 @@ import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
 // ---------- CLASS: COMBAT EVENT HANDLER
-@Mod.EventBusSubscriber(modid = AetasFerreaMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CombatEventHandler {
 
     // ---------- ATTRIBUTE UUIDS & SNAPSHOT DATA
@@ -265,18 +263,18 @@ public class CombatEventHandler {
 
                 if (isWooden) {
                     if (validArmorPieces == 0) {
-                        if (attacker.getRandom().nextDouble() < 0.10) {
-                            weapon.hurtAndBreak(1, attacker, (e) -> e.broadcastBreakEvent(EquipmentSlot.MAINHAND));
+                        if (attacker.getRandom().nextDouble() < AetasFerreaConfig.WOOD_ON_NO_ARMOR_DMG_CHANCE.get()) {
+                            weapon.hurtAndBreak(AetasFerreaConfig.WOOD_ON_NO_ARMOR_DURABILITY_DMG.get(), attacker, (e) -> e.broadcastBreakEvent(EquipmentSlot.MAINHAND));
                         }
                     } else {
-                        if (attacker.getRandom().nextDouble() < 0.70) {
-                            weapon.hurtAndBreak(30 * validArmorPieces, attacker, (e) -> e.broadcastBreakEvent(EquipmentSlot.MAINHAND));
+                        if (attacker.getRandom().nextDouble() < AetasFerreaConfig.WOOD_ON_ARMOR_DMG_CHANCE.get()) {
+                            weapon.hurtAndBreak(AetasFerreaConfig.WOOD_ON_ARMOR_DURABILITY_DMG.get() * validArmorPieces, attacker, (e) -> e.broadcastBreakEvent(EquipmentSlot.MAINHAND));
                         }
                     }
                 } else if (isStone) {
                     if (validArmorPieces > 0) {
-                        if (attacker.getRandom().nextDouble() < 0.20) {
-                            weapon.hurtAndBreak(1, attacker, (e) -> e.broadcastBreakEvent(EquipmentSlot.MAINHAND));
+                        if (attacker.getRandom().nextDouble() < AetasFerreaConfig.STONE_ON_ARMOR_DMG_CHANCE.get()) {
+                            weapon.hurtAndBreak(AetasFerreaConfig.STONE_ON_ARMOR_DURABILITY_DMG.get(), attacker, (e) -> e.broadcastBreakEvent(EquipmentSlot.MAINHAND));
                         }
                     }
                 }
@@ -387,7 +385,7 @@ public class CombatEventHandler {
             if ((chainmailPieces > 0 || ironPieces > 0 || diamondPieces > 0 || fantasyEndgame > 0) && (isHighMass || isBlunt)) {
                 double maxPieces = Math.max(chainmailPieces, Math.max(ironPieces, Math.max(diamondPieces, fantasyEndgame)));
                 double effectRatio = maxPieces / 4.0;
-                event.setAmount((float) (event.getAmount() * (1.0 + (0.4 * effectRatio))));
+                event.setAmount((float) (event.getAmount() * (1.0 + (AetasFerreaConfig.BLUNT_ARMOR_CRUSH_BOOST.get() * effectRatio))));
             }
 
             // Damage Floors against Full Diamond/High-Tier armor
@@ -465,15 +463,15 @@ public class CombatEventHandler {
                         countAttr.removeModifier(LEATHER_COUNT_UUID);
 
                         if (isHeavy) {
-                            countAttr.addTransientModifier(new AttributeModifier(HEAVY_UUID, "Heavy Armor Penalty", -10.0, AttributeModifier.Operation.ADDITION));
-                            if (!player.getPersistentData().getBoolean("too_heavy_to_roll")) {
+                            countAttr.addTransientModifier(new AttributeModifier(HEAVY_UUID, "Heavy Armor Penalty", AetasFerreaConfig.HEAVY_ARMOR_ROLL_PENALTY.get(), AttributeModifier.Operation.ADDITION));
+                            long gameTime = player.level().getGameTime();
+                            if (gameTime - player.getPersistentData().getLong("too_heavy_to_roll_cooldown") >= 100L) {
                                 player.displayClientMessage(net.minecraft.network.chat.Component.translatable("message.aetasferreamod.combat.too_heavy_roll").withStyle(net.minecraft.ChatFormatting.RED), true);
-                                player.getPersistentData().putBoolean("too_heavy_to_roll", true);
+                                player.getPersistentData().putLong("too_heavy_to_roll_cooldown", gameTime);
                             }
                         } else {
-                            player.getPersistentData().putBoolean("too_heavy_to_roll", false);
                             if (isFullLeather) {
-                                countAttr.addTransientModifier(new AttributeModifier(LEATHER_COUNT_UUID, "Leather Armor Bonus", 1.0, AttributeModifier.Operation.ADDITION));
+                                countAttr.addTransientModifier(new AttributeModifier(LEATHER_COUNT_UUID, "Leather Armor Bonus", AetasFerreaConfig.LEATHER_ROLL_BONUS.get(), AttributeModifier.Operation.ADDITION));
                             }
                         }
                     }
@@ -484,7 +482,7 @@ public class CombatEventHandler {
                     if (rechargeAttr != null) {
                         rechargeAttr.removeModifier(LEATHER_RECHARGE_UUID);
                         if (!isHeavy && isFullLeather) {
-                            rechargeAttr.addTransientModifier(new AttributeModifier(LEATHER_RECHARGE_UUID, "Leather Recharge Bonus", 0.5, AttributeModifier.Operation.MULTIPLY_BASE));
+                            rechargeAttr.addTransientModifier(new AttributeModifier(LEATHER_RECHARGE_UUID, "Leather Recharge Bonus", AetasFerreaConfig.LEATHER_RECHARGE_MULT.get(), AttributeModifier.Operation.MULTIPLY_BASE));
                         }
                     }
                 }

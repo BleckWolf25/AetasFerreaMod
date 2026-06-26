@@ -13,7 +13,7 @@
  * Entities are spawned at the executing player's position with appropriate stats and equipment.
  *
  * @since 20/05/2026
- * @updated 24/06/2026
+ * @updated 25/06/2026
  */
 // ---------- PACKAGE
 package com.aetasferrea.aetasferreamod.command;
@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 
-import com.aetasferrea.aetasferreamod.AetasFerreaMod;
 import com.aetasferrea.aetasferreamod.entity.AetasDonkey;
 import com.aetasferrea.aetasferreamod.entity.AetasMule;
 import com.aetasferrea.aetasferreamod.entity.HorseEventHandler;
@@ -40,10 +39,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
 // ---------- CLASS: EquineTestCommand
-@Mod.EventBusSubscriber(modid = AetasFerreaMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+
 public class EquineTestCommand {
 
     // ---------- CONSTANTS

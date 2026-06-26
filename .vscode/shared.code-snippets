@@ -1,0 +1,27 @@
+{
+    "Aetas Ferrea Java Header": {
+        "scope": "java",
+        "prefix": "fileheader",
+        "body": [
+            "/**",
+            " * @file $TM_FILENAME",
+            " *",
+            " * @version 1.0.0",
+            " * @author BleckWolf25",
+            " * @license MIT",
+            " *",
+            " * @summary ${1:One-phrase summary.}",
+            " *",
+            " * @description",
+            " * ${2:Detailed explanation of the file's purpose and functionality.}",
+            " *",
+            " * @since $CURRENT_DATE/$CURRENT_MONTH/$CURRENT_YEAR",
+            " * @updated $CURRENT_DATE/$CURRENT_MONTH/$CURRENT_YEAR",
+            " */",
+            "// ---------- PACKAGE",
+            "",
+            "$0"
+        ],
+        "description": "Insert standard BleckWolf25 Java file header"
+    }
+}
