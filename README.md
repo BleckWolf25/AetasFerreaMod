@@ -94,6 +94,15 @@ Aetas Ferrea is a medieval survival mod built for Minecraft 1.20.1 using the Min
 - Panic Speed: Being on fire triggers a flight or panic response, granting a temporary movement speed boost of Speed I.
 - Burning Weapon Attacks: Designated items in the `aetasferreamod:burning_items` tag inflict burning fire ticks for five seconds when attacking targets.
 
+### 14. Monarch & Vanguard Entity
+
+- Monarch boss: Nether boss that spawns on few structures and basalt deltas.
+- Vanguard Mini-boss: Nether guardian-like that spawns on most biomes and same structures as monarch.
+
+### 15. Game balancing
+
+- Configurable safe-spawn chuncks that blocks natural spawning from `MONSTER` mobs.
+
 ## Setup & Compilation Process
 
 To compile the mod, run the following command in the project root:
