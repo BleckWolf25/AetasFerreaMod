@@ -2,7 +2,7 @@
  * @file AetasFerreaBiomeTagsProvider.java
  *
  * @version 1.0.0
- * @author Bleckwolf25
+ * @author BleckWolf25
  * @license MIT
  *
  * @summary Defines custom biome tags to control animal spawn behaviors and rules.
@@ -13,7 +13,7 @@
  * sheep restricted to mountains/hills) to enhance immersive spawning.
  *
  * @since 25/06/2026
- * @updated 26/06/2026
+ * @updated 01/07/2026
  */
 // ---------- PACKAGE
 package com.aetasferrea.aetasferreamod.datagen;
@@ -42,6 +42,7 @@ public class AetasFerreaBiomeTagsProvider extends BiomeTagsProvider {
     }
 
     // ---------- METHOD: ADD TAGS
+    @SuppressWarnings("removal")
     @Override
     protected void addTags(@Nonnull HolderLookup.Provider pProvider) {
 

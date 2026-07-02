@@ -2,7 +2,7 @@
  * @file EconomyEventHandler.java
  *
  * @version 1.0.0
- * @author Bleckwolf25
+ * @author BleckWolf25
  * @license MIT
  *
  * @summary Subscribes to trade events to reform villager and wandering trader transactions.

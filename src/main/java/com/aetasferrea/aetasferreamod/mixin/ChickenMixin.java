@@ -2,7 +2,7 @@
  * @file ChickenMixin.java
  *
  * @version 1.0.0
- * @author Bleckwolf25
+ * @author BleckWolf25
  * @license MIT
  *
  * @summary Mixin for chickens to manage flight drag and wing fatigue.

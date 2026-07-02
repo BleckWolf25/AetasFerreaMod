@@ -98,5 +98,9 @@
   "tooltip.aetasferreamod.horse.class": "Classe: ",
   "tooltip.aetasferreamod.horse.daily_feeds": "Alimentação Diária: %d/4",
   "tooltip.aetasferreamod.horse.combat_xp": "XP de Combate: %d/125",
-  "tooltip.aetasferreamod.horse.agility_xp": "XP de Agilidade: %d/150"
+  "tooltip.aetasferreamod.horse.agility_xp": "XP de Agilidade: %d/150",
+
+  "message.aetasferrea.void_rejects": "O void rejeita-te. Exige o catalisador do Wither.",
+  "message.aetasferrea.void_accepts": "A Estrela ressoa... o void aceita a tua oferenda.",
+  "death.attack.aetasferreamod.void_rejection": "%1$s foi rejeitado pelo void."
 }

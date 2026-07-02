@@ -2,7 +2,7 @@
  * @file FallDamageEventHandler.java
  *
  * @version 1.0.0
- * @author Bleckwolf25
+ * @author BleckWolf25
  * @license MIT
  *
  * @summary Intercepts and overrides vanilla fall damage mechanics for specific entities.

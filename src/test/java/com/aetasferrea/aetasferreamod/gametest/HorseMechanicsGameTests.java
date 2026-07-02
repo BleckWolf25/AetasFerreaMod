@@ -63,6 +63,7 @@ public class HorseMechanicsGameTests {
         }
 
         // Spawn a donkey within the water block bounds to trigger the immersion check
+        @SuppressWarnings("unused")
         Donkey donkey = helper.spawn(EntityType.DONKEY, 1, 3, 1);
 
         // Verify the donkey entity does not cause server failures upon drowning or water ticking

@@ -2,7 +2,7 @@
  * @file FishingEventHandler.java
  *
  * @version 1.0.0
- * @author Bleckwolf25
+ * @author BleckWolf25
  * @license MIT
  *
  * @summary Subscribes to player fishing events to filter fish drops by biome.
@@ -12,7 +12,7 @@
  * where they were fished, replacing non-native fish drops with random items from a junk pool.
  *
  * @since 25/06/2026
- * @updated 25/06/2026
+ * @updated 01/07/2026
  */
 // ---------- PACKAGE
 package com.aetasferrea.aetasferreamod.events;
@@ -41,6 +41,7 @@ import java.util.Objects;
 public class FishingEventHandler {
 
     // ---------- CONSTANTS
+    @SuppressWarnings("removal")
     private static final TagKey<Item> JUNK_TAG = ItemTags.create(new ResourceLocation(AetasFerreaMod.MODID, "fishing_junk"));
 
     // ---------- FISH IDENTIFICATION

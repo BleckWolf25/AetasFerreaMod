@@ -2,7 +2,7 @@
  * @file FoxMixin.java
  *
  * @version 1.0.0
- * @author Bleckwolf25
+ * @author BleckWolf25
  * @license MIT
  *
  * @summary Mixin for foxes to restrict what items they can hold.

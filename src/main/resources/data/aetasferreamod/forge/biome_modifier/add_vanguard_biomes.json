@@ -1,0 +1,17 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": [
+    "minecraft:basalt_deltas",
+    "minecraft:nether_wastes",
+    "minecraft:soul_sand_valley"
+  ],
+  "dimensions": [
+    "minecraft:the_nether"
+  ],
+  "spawners": {
+    "type": "aetasferreamod:vanguard",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

@@ -2,7 +2,7 @@
  * @file GoldenEquipmentEventHandler.java
  *
  * @version 1.0.0
- * @author Bleckwolf25
+ * @author BleckWolf25
  * @license MIT
  *
  * @summary Implements the Golden Dulling feature which dynamically degrades equipment stats as durability drops.
@@ -53,15 +53,15 @@ public class GoldenEquipmentEventHandler {
 
         int maxDamage = stack.getMaxDamage();
         int currentDamage = stack.getDamageValue();
-        
+
         if (maxDamage > 0) {
             double damageFraction = (double) currentDamage / (double) maxDamage;
-            
+
             if (damageFraction > 0.0) {
                 // Apply a maximum penalty of 50% at 0 durability
                 double damagePenalty = -0.5 * damageFraction;
                 double speedPenalty = -0.3 * damageFraction;
-                
+
                 event.addModifier(Attributes.ATTACK_DAMAGE, new AttributeModifier(Objects.requireNonNull(DULLING_DAMAGE_UUID), "Golden Dulling Damage", damagePenalty, AttributeModifier.Operation.MULTIPLY_TOTAL));
                 event.addModifier(Attributes.ATTACK_SPEED, new AttributeModifier(Objects.requireNonNull(DULLING_SPEED_UUID), "Golden Dulling Speed", speedPenalty, AttributeModifier.Operation.MULTIPLY_TOTAL));
             }
@@ -79,10 +79,10 @@ public class GoldenEquipmentEventHandler {
 
         int maxDamage = stack.getMaxDamage();
         int currentDamage = stack.getDamageValue();
-        
+
         if (maxDamage > 0) {
             double damageFraction = (double) currentDamage / (double) maxDamage;
-            
+
             if (damageFraction > 0.0) {
                 float originalSpeed = event.getNewSpeed();
                 // Reduce mining speed by up to 50%

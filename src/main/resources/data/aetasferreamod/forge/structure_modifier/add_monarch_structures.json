@@ -1,0 +1,10 @@
+{
+  "type": "aetasferreamod:add_spawns",
+  "structures": "#aetasferreamod:monarch_structures",
+  "spawners": {
+    "type": "aetasferreamod:monarch",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

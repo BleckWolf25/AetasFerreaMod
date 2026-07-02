@@ -2,7 +2,7 @@
  * @file AetasDonkey.java
  *
  * @version 1.0.0
- * @author Bleckwolf25
+ * @author BleckWolf25
  * @license MIT
  *
  * @summary Custom Donkey entity with Aetas Ferrea equine mechanics.
@@ -64,7 +64,7 @@ public class AetasDonkey extends Donkey {
     private int dailyFood = 0;
     private long lastFoodDay = 0L;
     private int customTemper = 0;
-    
+
     private boolean isSwimming = false;
     private boolean wasSwimming = false;
     private int swimTicks = 0;
@@ -85,7 +85,7 @@ public class AetasDonkey extends Donkey {
     public double getThrottle() { return this.throttle; }
     public int getDailyFood() { return this.dailyFood; }
     public int getCustomTemper() { return this.customTemper; }
-    
+
     public void rerollStats(@Nonnull net.minecraft.util.RandomSource random) {
         AttributeInstance speed = this.getAttribute(Objects.requireNonNull(Attributes.MOVEMENT_SPEED));
         if (speed != null) speed.setBaseValue(0.105 + random.nextDouble() * (0.128 - 0.105));
@@ -182,19 +182,19 @@ public class AetasDonkey extends Donkey {
 
     @Override
     public boolean isFood(@Nonnull ItemStack stack) {
-        return stack.is(Objects.requireNonNull(Items.WHEAT)) || 
-               stack.is(Objects.requireNonNull(Items.SUGAR)) || 
-               stack.is(Objects.requireNonNull(Items.HAY_BLOCK)) || 
-               stack.is(Objects.requireNonNull(Items.APPLE)) || 
-               stack.is(Objects.requireNonNull(Items.GOLDEN_CARROT)) || 
-               stack.is(Objects.requireNonNull(Items.GOLDEN_APPLE)) || 
+        return stack.is(Objects.requireNonNull(Items.WHEAT)) ||
+               stack.is(Objects.requireNonNull(Items.SUGAR)) ||
+               stack.is(Objects.requireNonNull(Items.HAY_BLOCK)) ||
+               stack.is(Objects.requireNonNull(Items.APPLE)) ||
+               stack.is(Objects.requireNonNull(Items.GOLDEN_CARROT)) ||
+               stack.is(Objects.requireNonNull(Items.GOLDEN_APPLE)) ||
                stack.is(Objects.requireNonNull(Items.ENCHANTED_GOLDEN_APPLE));
     }
 
     @Override
     public InteractionResult mobInteract(@Nonnull Player player, @Nonnull InteractionHand hand) {
         @Nonnull ItemStack itemstack = Objects.requireNonNull(player.getItemInHand(hand));
-        
+
         if (!this.isTamed()) {
             if (isFood(itemstack)) {
                 if (!this.level().isClientSide) {
@@ -213,7 +213,7 @@ public class AetasDonkey extends Donkey {
                     }
                     if (!player.isCreative()) itemstack.shrink(1);
                     this.dailyFood++;
-                    
+
                     int temperGain = itemstack.is(Objects.requireNonNull(Items.HAY_BLOCK)) ? 9 : 1;
                     this.customTemper += temperGain;
                     this.level().playSound(null, Objects.requireNonNull(this.blockPosition()), Objects.requireNonNull(SoundEvents.DONKEY_EAT), SoundSource.NEUTRAL, 1.0f, 1.0f);
@@ -369,7 +369,7 @@ public class AetasDonkey extends Donkey {
 
     @Override
     public boolean canJump() { return super.canJump() && this.jumpCooldown <= 0 && !this.isSwimming && !this.isInWater(); }
-    
+
     @Override
     public void onPlayerJump(int pJumpPower) {
         if (this.jumpCooldown > 0) return;
@@ -405,7 +405,7 @@ public class AetasDonkey extends Donkey {
 
         if (this.isSwimming) {
             this.isReversing = false;
-            this.throttle = 0.35; 
+            this.throttle = 0.35;
             return;
         }
 
@@ -417,7 +417,7 @@ public class AetasDonkey extends Donkey {
         float forwardInput = rider.zza;
         boolean isForward = forwardInput > 0.0f;
         boolean isBackward = forwardInput < 0.0f;
-        
+
         if (this.throttle <= 0.01) {
             if (isBackward) this.isReversing = true;
             else if (isForward) this.isReversing = false;
@@ -426,7 +426,7 @@ public class AetasDonkey extends Donkey {
         double maxThrottle = this.isWalkMode() ? 0.50 : 1.0;
 
         if (this.throttle > maxThrottle) {
-            this.throttle = Math.max(maxThrottle, this.throttle - brakeDecay); 
+            this.throttle = Math.max(maxThrottle, this.throttle - brakeDecay);
         } else if ((isForward && !this.isReversing) || (isBackward && this.isReversing)) {
             this.throttle = Math.min(maxThrottle, this.throttle + throttleRise);
         } else if ((isBackward && !this.isReversing) || (isForward && this.isReversing)) {

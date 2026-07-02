@@ -2,7 +2,7 @@
  * @file VillagerTestCommand.java
  *
  * @version 1.0.0
- * @author Bleckwolf25
+ * @author BleckWolf25
  * @license MIT
  *
  * @summary Brigadier command for spawning a structured circle of trade-test villagers and a wandering trader.
@@ -100,10 +100,10 @@ public class VillagerTestCommand {
                     // Disable mob AI entirely to simplify trade browsing
                     villager.setNoAi(true);
                     villager.setAge(0);
-                    
+
                     VillagerData data = villager.getVillagerData().setProfession(requireNonNull(profession)).setLevel(lvl);
                     villager.setVillagerData(requireNonNull(data));
-                    
+
                     level.addFreshEntity(villager);
                 }
                 count++;

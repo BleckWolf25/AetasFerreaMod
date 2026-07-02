@@ -2,7 +2,7 @@
  * @file AttributeTooltipEventHandler.java
  *
  * @version 1.0.0
- * @author Bleckwolf25
+ * @author BleckWolf25
  * @license MIT
  *
  * @summary Intercepts and reformats item attribute tooltips to align with vanilla standards.
@@ -55,7 +55,7 @@ public class AttributeTooltipEventHandler {
         if (currentKey.equals(lastLanguageCacheKey)) {
             return;
         }
-        
+
         lastLanguageCacheKey = currentKey;
         SLOT_HEADERS.clear();
         for (EquipmentSlot slot : SLOTS) {
@@ -66,7 +66,7 @@ public class AttributeTooltipEventHandler {
 
     private static String getTranslatedAttributeName(Attribute attribute) {
         if (attribute == null || attribute.getDescriptionId() == null) return "";
-        return ATTRIBUTE_NAME_CACHE.computeIfAbsent(attribute, 
+        return ATTRIBUTE_NAME_CACHE.computeIfAbsent(attribute,
             a -> Component.translatable(Objects.requireNonNull(a.getDescriptionId())).getString().toLowerCase(Locale.ROOT));
     }
 

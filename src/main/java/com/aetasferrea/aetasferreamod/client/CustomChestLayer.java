@@ -2,7 +2,7 @@
  * @file CustomChestLayer.java
  *
  * @version 1.0.0
- * @author Bleckwolf25
+ * @author BleckWolf25
  * @license MIT
  *
  * @summary Render layer that draws saddlebag chest models on the Aetas Horse when equipped.

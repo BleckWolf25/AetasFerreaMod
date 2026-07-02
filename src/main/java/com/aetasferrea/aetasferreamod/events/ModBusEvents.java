@@ -2,7 +2,7 @@
  * @file ModBusEvents.java
  *
  * @version 1.0.0
- * @author Bleckwolf25
+ * @author BleckWolf25
  * @license MIT
  *
  * @summary Mod event bus subscriber for registering custom entity attribute maps.
@@ -15,7 +15,6 @@
  * @since 20/05/2026
  * @updated 24/06/2026
  */
-
 // ---------- PACKAGE
 package com.aetasferrea.aetasferreamod.events;
 

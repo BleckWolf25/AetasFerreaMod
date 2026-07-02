@@ -2,7 +2,7 @@
  * @file SquidMixin.java
  *
  * @version 1.0.0
- * @author Bleckwolf25
+ * @author BleckWolf25
  * @license MIT
  *
  * @summary Mixin for squid entities to prevent beaching behaviors.

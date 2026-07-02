@@ -2,7 +2,7 @@
  * @file EntityInit.java
  *
  * @version 1.0.0
- * @author Bleckwolf25
+ * @author BleckWolf25
  * @license MIT
  *
  * @summary Deferred registration of all custom entity types for the Aetas Ferrea mod.
@@ -14,7 +14,6 @@
  * @since 20/05/2026
  * @updated 24/06/2026
  */
-
 // ---------- PACKAGE
 package com.aetasferrea.aetasferreamod.init;
 
@@ -23,6 +22,8 @@ import com.aetasferrea.aetasferreamod.AetasFerreaMod;
 import com.aetasferrea.aetasferreamod.entity.AetasDonkey;
 import com.aetasferrea.aetasferreamod.entity.AetasMule;
 import com.aetasferrea.aetasferreamod.entity.HorseEventHandler;
+import com.aetasferrea.aetasferreamod.entity.boss.MonarchEntity;
+import com.aetasferrea.aetasferreamod.entity.boss.VanguardEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.registries.DeferredRegister;
@@ -57,4 +58,18 @@ public class EntityInit {
                     .sized(1.3964844F, 1.6F)
                     .clientTrackingRange(10)
                     .build("aetas_mule"));
+
+    public static final RegistryObject<EntityType<MonarchEntity>> MONARCH = ENTITIES.register("monarch",
+            () -> EntityType.Builder.of(MonarchEntity::new, MobCategory.MONSTER)
+                    .sized(0.6F, 1.95F)
+                    .clientTrackingRange(8)
+                    .fireImmune()
+                    .build("monarch"));
+
+    public static final RegistryObject<EntityType<VanguardEntity>> VANGUARD = ENTITIES.register("vanguard",
+            () -> EntityType.Builder.of(VanguardEntity::new, MobCategory.MONSTER)
+                    .sized(0.6F, 1.99F)
+                    .clientTrackingRange(8)
+                    .fireImmune()
+                    .build("vanguard"));
 }

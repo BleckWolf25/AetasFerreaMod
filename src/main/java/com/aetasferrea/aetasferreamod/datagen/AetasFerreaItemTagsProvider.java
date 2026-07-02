@@ -2,7 +2,7 @@
  * @file AetasFerreaItemTagsProvider.java
  *
  * @version 1.0.0
- * @author Bleckwolf25
+ * @author BleckWolf25
  * @license MIT
  *
  * @summary Defines all custom item tags for categorizing weapons, tools, and holdables.
@@ -14,7 +14,7 @@
  * abstractly without hardcoding specific item instances.
  *
  * @since 25/06/2026
- * @updated 26/06/2026
+ * @updated 01/07/2026
  */
 // ---------- PACKAGE
 package com.aetasferrea.aetasferreamod.datagen;
@@ -46,9 +46,10 @@ public class AetasFerreaItemTagsProvider extends ItemTagsProvider {
     }
 
     // ---------- METHOD: ADD TAGS
+    @SuppressWarnings("removal")
     @Override
     protected void addTags(@Nonnull HolderLookup.Provider pProvider) {
-        
+
         // ---------- TAG GROUP (Blunt Weapons)
         // Groups all weapons that deal crushing or blunt damage
         TagKey<Item> BLUNT_WEAPONS = ItemTags.create(new ResourceLocation(AetasFerreaMod.MODID, "blunt_weapons"));

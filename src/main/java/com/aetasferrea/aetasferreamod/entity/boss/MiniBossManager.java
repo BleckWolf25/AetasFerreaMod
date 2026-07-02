@@ -12,7 +12,7 @@
  * (e.g., Catena-Mail Vigil, Defiled Castellan, Dead Iron Knight, Diamond Knight) based on the world age (days).
  *
  * @since 20/05/2026
- * @updated 25/06/2026
+ * @updated 01/07/2026
  */
 // ---------- PACKAGE
 package com.aetasferrea.aetasferreamod.entity.boss;
@@ -20,6 +20,7 @@ package com.aetasferrea.aetasferreamod.entity.boss;
 // ---------- IMPORTS
 import com.aetasferrea.aetasferreamod.difficulty.AetasFerreaSavedData;
 import com.aetasferrea.aetasferreamod.difficulty.WorldAgeTracker;
+import com.aetasferrea.aetasferreamod.init.EntityInit;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -214,6 +215,43 @@ public class MiniBossManager {
                 if (targetPlayer != null) targetPlayer.sendSystemMessage(net.minecraft.network.chat.Component.translatable("message.aetasferreamod.boss.spawn_triple").withStyle(net.minecraft.ChatFormatting.RED));
                 return true;
             }
+        } else if (bossType.equals("monarch")) {
+            MonarchEntity monarch = EntityInit.MONARCH.get().create(level);
+            if (monarch != null) {
+                monarch.moveTo(spawnPos.getX() + 0.5D, spawnPos.getY(), spawnPos.getZ() + 0.5D, level.random.nextFloat() * 360F, 0.0F);
+                monarch.finalizeSpawn(level, level.getCurrentDifficultyAt(spawnPos), net.minecraft.world.entity.MobSpawnType.COMMAND, null, null);
+                level.addFreshEntity(monarch);
+                if (targetPlayer != null) targetPlayer.sendSystemMessage(net.minecraft.network.chat.Component.literal("The Hollow Monarch has arrived.").withStyle(net.minecraft.ChatFormatting.DARK_RED, net.minecraft.ChatFormatting.BOLD));
+                return true;
+            }
+        } else if (bossType.equals("vanguard")) {
+            VanguardEntity vanguard = EntityInit.VANGUARD.get().create(level);
+            if (vanguard != null) {
+                vanguard.moveTo(spawnPos.getX() + 0.5D, spawnPos.getY(), spawnPos.getZ() + 0.5D, level.random.nextFloat() * 360F, 0.0F);
+                vanguard.finalizeSpawn(level, level.getCurrentDifficultyAt(spawnPos), net.minecraft.world.entity.MobSpawnType.COMMAND, null, null);
+                level.addFreshEntity(vanguard);
+                if (targetPlayer != null) targetPlayer.sendSystemMessage(net.minecraft.network.chat.Component.literal("A Vanguard has spawned.").withStyle(net.minecraft.ChatFormatting.DARK_RED, net.minecraft.ChatFormatting.BOLD));
+                return true;
+            }
+        } else if (bossType.equals("both_monarch_vanguard")) {
+            BlockPos spawnPos2 = targetPlayer != null ? findSafeSpawnPosition(level, targetPlayer.blockPosition()) : spawnPos;
+            if (spawnPos2 == null) spawnPos2 = spawnPos;
+
+            MonarchEntity monarch = EntityInit.MONARCH.get().create(level);
+            VanguardEntity vanguard = EntityInit.VANGUARD.get().create(level);
+            if (monarch != null && vanguard != null) {
+                monarch.moveTo(spawnPos.getX() + 0.5D, spawnPos.getY(), spawnPos.getZ() + 0.5D, level.random.nextFloat() * 360F, 0.0F);
+                monarch.finalizeSpawn(level, level.getCurrentDifficultyAt(spawnPos), net.minecraft.world.entity.MobSpawnType.COMMAND, null, null);
+                level.addFreshEntity(monarch);
+
+                vanguard.moveTo(spawnPos2.getX() + 0.5D, spawnPos2.getY(), spawnPos2.getZ() + 0.5D, level.random.nextFloat() * 360F, 0.0F);
+                vanguard.getPersistentData().putBoolean("IsRoyalEscort", true);
+                vanguard.finalizeSpawn(level, level.getCurrentDifficultyAt(spawnPos2), net.minecraft.world.entity.MobSpawnType.TRIGGERED, null, null);
+                level.addFreshEntity(vanguard);
+
+                if (targetPlayer != null) targetPlayer.sendSystemMessage(net.minecraft.network.chat.Component.literal("The Hollow Monarch and its royal Vanguards have emerged!").withStyle(net.minecraft.ChatFormatting.DARK_RED, net.minecraft.ChatFormatting.BOLD));
+                return true;
+            }
         }
         return false;
     }
@@ -241,7 +279,7 @@ public class MiniBossManager {
     }
 
     // ---------- BOSS CONFIGURATORS (EQUIPMENT & STATS)
-    
+
     /**
      * Initializes the Catena-Mail Vigil (Skeleton Archer boss).
      */
@@ -249,14 +287,14 @@ public class MiniBossManager {
         skeleton.setPersistenceRequired();
         skeleton.getPersistentData().putBoolean("IsCatenaVigil", true);
         skeleton.setCustomName(net.minecraft.network.chat.Component.translatable("entity.aetasferreamod.boss.vigil"));
-        
+
         // 60 HP (30 hearts) and high target acquisition range (128 blocks)
         safeSetAttribute(skeleton, Attributes.MAX_HEALTH, 60.0D);
         skeleton.setHealth(60.0F);
         safeSetAttribute(skeleton, Attributes.FOLLOW_RANGE, 128.0D);
-        
+
         skeleton.addEffect(new MobEffectInstance(MobEffects.GLOWING, -1, 0, false, false));
-        
+
         // Equips full Chainmail Armor (0% drop rate)
         skeleton.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.CHAINMAIL_HELMET));
         skeleton.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
@@ -266,7 +304,7 @@ public class MiniBossManager {
         skeleton.setDropChance(EquipmentSlot.CHEST, 0.0F);
         skeleton.setDropChance(EquipmentSlot.LEGS, 0.0F);
         skeleton.setDropChance(EquipmentSlot.FEET, 0.0F);
-        
+
         // Equips Power II Bow (damaged slightly, 100% drop rate)
         ItemStack bow = new ItemStack(Items.BOW);
         bow.enchant(Enchantments.POWER_ARROWS, 2);
@@ -282,19 +320,20 @@ public class MiniBossManager {
         husk.setPersistenceRequired();
         husk.getPersistentData().putBoolean("IsDefiledCastellan", true);
         husk.setCustomName(net.minecraft.network.chat.Component.translatable("entity.aetasferreamod.boss.castellan"));
-        
+
         // 80 HP (40 hearts), 50% knockback resistance, and high follow range (128 blocks)
         safeSetAttribute(husk, Attributes.MAX_HEALTH, 80.0D);
         husk.setHealth(80.0F);
         safeSetAttribute(husk, Attributes.KNOCKBACK_RESISTANCE, 0.5D);
         safeSetAttribute(husk, Attributes.FOLLOW_RANGE, 128.0D);
-        
+
         // Equips a damaged Iron Chestplate
         ItemStack chest = new ItemStack(Items.IRON_CHESTPLATE);
         chest.setDamageValue(chest.getMaxDamage() - 15);
         husk.setItemSlot(EquipmentSlot.CHEST, chest);
-        
+
         // Equips a Spartan Weaponry Iron Greatsword if available, otherwise falls back to Vanilla Iron Sword
+        @SuppressWarnings("removal")
         Item greatsword = ForgeRegistries.ITEMS.getValue(new ResourceLocation("spartanweaponry", "iron_greatsword"));
         if (greatsword == null || greatsword == Items.AIR) {
             greatsword = Items.IRON_SWORD;
@@ -309,19 +348,19 @@ public class MiniBossManager {
         husk.setPersistenceRequired();
         husk.getPersistentData().putBoolean("IsDeadIronKnight", true);
         husk.setCustomName(net.minecraft.network.chat.Component.translatable("entity.aetasferreamod.boss.iron_knight"));
-        
+
         // 100 HP (50 hearts), high follow range (128 blocks), and 10% faster movement speed
         safeSetAttribute(husk, Attributes.MAX_HEALTH, 100.0D);
         husk.setHealth(100.0F);
         safeSetAttribute(husk, Attributes.FOLLOW_RANGE, 128.0D);
         safeAddModifier(husk, Attributes.MOVEMENT_SPEED, new AttributeModifier("KnightSpeed", 0.1D, AttributeModifier.Operation.MULTIPLY_TOTAL));
-        
+
         ItemStack head = new ItemStack(Items.IRON_HELMET);
         ItemStack chest = new ItemStack(Items.IRON_CHESTPLATE);
         ItemStack legs = new ItemStack(Items.IRON_LEGGINGS);
         ItemStack feet = new ItemStack(Items.IRON_BOOTS);
         ItemStack sword = new ItemStack(Items.IRON_SWORD);
-        
+
         // Optional Enchantments (Protection II on armor, Sharpness III on sword)
         if (enchanted) {
             head.enchant(Enchantments.ALL_DAMAGE_PROTECTION, 2);
@@ -330,14 +369,14 @@ public class MiniBossManager {
             feet.enchant(Enchantments.ALL_DAMAGE_PROTECTION, 2);
             sword.enchant(Enchantments.SHARPNESS, 3);
         }
-        
+
         husk.setItemSlot(EquipmentSlot.HEAD, head);
         husk.setItemSlot(EquipmentSlot.CHEST, chest);
         husk.setItemSlot(EquipmentSlot.LEGS, legs);
         husk.setItemSlot(EquipmentSlot.FEET, feet);
         husk.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.SHIELD));
         husk.setItemSlot(EquipmentSlot.MAINHAND, sword);
-        
+
         // Spawns 4 accompanying breach squad (Sapper Squad) members with iron gear and tools
         Item[] sapperWeapons = {Items.IRON_PICKAXE, Items.IRON_PICKAXE, Items.IRON_SHOVEL, Items.IRON_AXE};
         for (int i = 0; i < 4; i++) {
@@ -363,27 +402,27 @@ public class MiniBossManager {
         husk.setPersistenceRequired();
         husk.getPersistentData().putBoolean("IsDiamondKnight", true);
         husk.setCustomName(net.minecraft.network.chat.Component.translatable("entity.aetasferreamod.boss.diamond_knight"));
-        
+
         // 150 HP (75 hearts), full knockback resistance (1.0), and 15% speed increase
         safeSetAttribute(husk, Attributes.MAX_HEALTH, 150.0D);
         husk.setHealth(150.0F);
         safeSetAttribute(husk, Attributes.FOLLOW_RANGE, 128.0D);
         safeSetAttribute(husk, Attributes.KNOCKBACK_RESISTANCE, 1.0D);
         safeAddModifier(husk, Attributes.MOVEMENT_SPEED, new AttributeModifier("KnightSpeed", 0.15D, AttributeModifier.Operation.MULTIPLY_TOTAL));
-        
+
         ItemStack head = new ItemStack(Items.DIAMOND_HELMET);
         ItemStack chest = new ItemStack(Items.DIAMOND_CHESTPLATE);
         ItemStack legs = new ItemStack(Items.DIAMOND_LEGGINGS);
         ItemStack feet = new ItemStack(Items.DIAMOND_BOOTS);
         ItemStack sword = new ItemStack(Items.DIAMOND_SWORD);
-        
+
         // Strong enchantments (Protection IV on armor, Sharpness V on sword)
         head.enchant(Enchantments.ALL_DAMAGE_PROTECTION, 4);
         chest.enchant(Enchantments.ALL_DAMAGE_PROTECTION, 4);
         legs.enchant(Enchantments.ALL_DAMAGE_PROTECTION, 4);
         feet.enchant(Enchantments.ALL_DAMAGE_PROTECTION, 4);
         sword.enchant(Enchantments.SHARPNESS, 5);
-        
+
         husk.setItemSlot(EquipmentSlot.HEAD, head);
         husk.setItemSlot(EquipmentSlot.CHEST, chest);
         husk.setItemSlot(EquipmentSlot.LEGS, legs);
@@ -393,7 +432,7 @@ public class MiniBossManager {
     }
 
     // ---------- SAFE ATTRIBUTE HELPERS
-    
+
     /**
      * Safely applies a base value to an entity attribute if it exists.
      */

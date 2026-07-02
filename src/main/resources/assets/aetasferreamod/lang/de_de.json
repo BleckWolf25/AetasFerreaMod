@@ -98,5 +98,9 @@
   "tooltip.aetasferreamod.horse.class": "Klasse: ",
   "tooltip.aetasferreamod.horse.daily_feeds": "Fütterungen Heute: %d/4",
   "tooltip.aetasferreamod.horse.combat_xp": "Kampf-EP: %d/125",
-  "tooltip.aetasferreamod.horse.agility_xp": "Wendigkeits-EP: %d/150"
+  "tooltip.aetasferreamod.horse.agility_xp": "Wendigkeits-EP: %d/150",
+
+  "message.aetasferrea.void_rejects": "Die Leere weist dich zurück. Sie verlangt den Katalysator des Withers.",
+  "message.aetasferrea.void_accepts": "Der Stern schwingt mit... die Leere akzeptiert dein Opfer.",
+  "death.attack.aetasferreamod.void_rejection": "%1$s wurde aus der Leere zurückgewiesen."
 }

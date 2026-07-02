@@ -137,16 +137,19 @@ dependencies {
 
     // Enhanced AI
     compileOnly fg.deobf(libs.enhanced.ai.get())
-    
+
     // Combat Roll
     compileOnly fg.deobf(libs.combat.roll.get())
-    
+
     // Better Combat
     compileOnly fg.deobf(libs.better.combat.get())
-    
+
+    // Pehkui
+    compileOnly fg.deobf(libs.pehkui.get())
+
     // Controlling
     implementation fg.deobf(libs.controlling.get())
-    
+
     // Searchables (Required by Controlling)
     implementation fg.deobf(libs.searchables.get())
 
@@ -231,7 +234,7 @@ modrinth {
 // CurseForge Publishing Configuration
 task publishCurseForge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
     apiToken = System.getenv("CURSEFORGE_TOKEN") ?: ""
-    def projectId = "123456" // Replace with your numeric CurseForge project ID
+    def projectId = "1568181"
     def mainFile = upload(projectId, jar)
     mainFile.changelog = "Release ${project.version}"
     mainFile.releaseType = 'release'

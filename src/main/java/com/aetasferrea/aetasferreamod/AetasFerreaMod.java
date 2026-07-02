@@ -2,7 +2,7 @@
  * @file AetasFerreaMod.java
  *
  * @version 1.0.0
- * @author Bleckwolf25
+ * @author BleckWolf25
  * @license MIT
  *
  * @summary Entry point for the Aetas Ferrea Forge mod.
@@ -12,15 +12,19 @@
  * and conditionally registers the in-game config screen when no third-party config mod is present.
  *
  * @since 20/05/2026
- * @updated 25/06/2026
+ * @updated 01/07/2026
  */
 // ---------- PACKAGE
 package com.aetasferrea.aetasferreamod;
 
 // ---------- IMPORTS
 import com.aetasferrea.aetasferreamod.init.ModItems;
+import com.aetasferrea.aetasferreamod.init.EntityInit;
+import com.aetasferrea.aetasferreamod.entity.boss.MonarchEntity;
+import com.aetasferrea.aetasferreamod.entity.boss.VanguardEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 
@@ -32,14 +36,17 @@ public class AetasFerreaMod {
     public static final String MODID = "aetasferreamod";
 
     // ---------- CONSTRUCTOR
+    @SuppressWarnings("removal")
     public AetasFerreaMod() {
         IEventBus modEventBus = net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext.get().getModEventBus();
 
         ModItems.ITEMS.register(modEventBus);
         com.aetasferrea.aetasferreamod.init.EntityInit.ENTITIES.register(modEventBus);
+        com.aetasferrea.aetasferreamod.init.StructureModifierInit.STRUCTURE_MODIFIERS.register(modEventBus);
 
         // Deferred to FMLCommonSetupEvent so network packets register on both sides safely
         modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(this::registerEntityAttributes);
 
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(com.aetasferrea.aetasferreamod.events.MobSpawnEventHandler.class);
@@ -64,7 +71,9 @@ public class AetasFerreaMod {
         MinecraftForge.EVENT_BUS.register(com.aetasferrea.aetasferreamod.events.HarvestFrictionHandler.class);
         MinecraftForge.EVENT_BUS.register(com.aetasferrea.aetasferreamod.events.HorseMechanicsHandler.class);
         MinecraftForge.EVENT_BUS.register(com.aetasferrea.aetasferreamod.events.HorseReplacementHandler.class);
-        
+        MinecraftForge.EVENT_BUS.register(com.aetasferrea.aetasferreamod.events.WitherEventHandler.class);
+        MinecraftForge.EVENT_BUS.register(com.aetasferrea.aetasferreamod.events.SafeSpawnEventHandler.class);
+
         net.minecraftforge.fml.ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, AetasFerreaConfig.SPEC);
 
         // Only register the fallback config screen if no dedicated config mod is loaded
@@ -84,8 +93,15 @@ public class AetasFerreaMod {
         });
     }
 
+    // ---------- ENTITY ATTRIBUTES
+    private void registerEntityAttributes(final EntityAttributeCreationEvent event) {
+        event.put(EntityInit.MONARCH.get(), MonarchEntity.createAttributes().build());
+        event.put(EntityInit.VANGUARD.get(), VanguardEntity.createAttributes().build());
+    }
+
     // ---------- CLIENT CONFIG SCREEN REGISTRATION
     private static class ClientHelper {
+        @SuppressWarnings("removal")
         private static void registerConfigScreen() {
             net.minecraftforge.fml.ModLoadingContext.get().registerExtensionPoint(
                 net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory.class,

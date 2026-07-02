@@ -11,7 +11,7 @@
  * Centralizes all tunable numbers, caps, and toggles, and auto-generates the 'aetasferreamod-common.toml' file.
  *
  * @since 20/05/2026
- * @updated 25/06/2026
+ * @updated 01/07/2026
  */
 // ---------- PACKAGE
 package com.aetasferrea.aetasferreamod;
@@ -21,7 +21,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 
 // ---------- CONFIGURATION CLASS
 public class AetasFerreaConfig {
-    
+
     // ---------- CONFIG SPEC & BUILDER
     public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
     public static final ForgeConfigSpec SPEC;
@@ -30,7 +30,7 @@ public class AetasFerreaConfig {
     // Golden Equipment toggles
     public static final ForgeConfigSpec.BooleanValue ENABLE_GOLDEN_DULLING;
     public static final ForgeConfigSpec.BooleanValue ENABLE_GOLDEN_ENCHANTS;
-    
+
     // Armor Realism toggles and values
     public static final ForgeConfigSpec.BooleanValue ENABLE_ARMOR_REALISM;
 
@@ -47,6 +47,7 @@ public class AetasFerreaConfig {
     public static final ForgeConfigSpec.IntValue PUFFERFISH_COOLDOWN_TICKS;
     public static final ForgeConfigSpec.IntValue SPIDER_SURFACE_Y;
     public static final ForgeConfigSpec.IntValue ARMOR_TRADE_MIN_PRICE;
+    public static final ForgeConfigSpec.IntValue SAFE_ZONE_CHUNK_RADIUS;
 
     // Combat Tweaks
     public static final ForgeConfigSpec.DoubleValue BLUNT_ARMOR_CRUSH_BOOST;
@@ -76,35 +77,46 @@ public class AetasFerreaConfig {
     public static final ForgeConfigSpec.DoubleValue MINE_WRONG_TOOL_DMG_MAX;
     public static final ForgeConfigSpec.IntValue WRONG_TOOL_DURABILITY_DMG;
     public static final ForgeConfigSpec.IntValue KNIFE_CHOP_DURABILITY_DMG;
+
+    // Wither Tweaks
+    public static final ForgeConfigSpec.DoubleValue WITHER_MAX_HEALTH;
+    public static final ForgeConfigSpec.DoubleValue WITHER_EXPLOSION_RADIUS;
+    public static final ForgeConfigSpec.BooleanValue WITHER_EXPLOSION_APPLY_WITHER_EFFECT;
+    public static final ForgeConfigSpec.BooleanValue WITHER_EXPLOSION_DESTROY_BEDROCK_OBSIDIAN;
+    public static final ForgeConfigSpec.IntValue WITHER_REGEN_TICKS;
+    public static final ForgeConfigSpec.DoubleValue WITHER_HEAL_ON_KILL_AMOUNT;
+    public static final ForgeConfigSpec.IntValue WITHER_HEAL_ON_KILL_DURATION;
+    public static final ForgeConfigSpec.BooleanValue WITHER_ARROW_IMMUNITY;
+
     // ---------- CONFIGURATION REGISTRATION
     static {
         BUILDER.push("Realism Mechanics");
-        
+
         ENABLE_GOLDEN_DULLING = BUILDER.comment("Whether golden equipment degrades its stats as durability drops.")
                 .define("enableGoldenDulling", true);
-                
+
         ENABLE_GOLDEN_ENCHANTS = BUILDER.comment("Whether golden equipment automatically receives enchants when obtained.")
                 .define("enableGoldenEnchants", true);
-                
+
         ENABLE_ARMOR_REALISM = BUILDER.comment("Whether the Armor Realism Matrix (Slash immunity, blunt bypass) is enabled.")
                 .define("enableArmorRealism", true);
-                
+
         BUILDER.pop();
-        
+
         BUILDER.push("Armor Realism Values");
-        
+
         // Deflection stats for Iron armor
         ARROW_DEFLECTION_CAP_IRON = BUILDER.comment("Max arrow deflection chance for full Iron Armor (e.g., 0.20 for 20%)")
                 .defineInRange("arrowDeflectionCapIron", 0.20, 0.0, 1.0);
         ARROW_DEFLECTION_PER_PIECE_IRON = BUILDER.comment("Arrow deflection chance per Iron Armor piece")
                 .defineInRange("arrowDeflectionPerPieceIron", 0.05, 0.0, 1.0);
-                
+
         // Deflection stats for Diamond armor
         ARROW_DEFLECTION_CAP_DIAMOND = BUILDER.comment("Max arrow deflection chance for full Diamond Armor (e.g., 0.60 for 60%)")
                 .defineInRange("arrowDeflectionCapDiamond", 0.60, 0.0, 1.0);
         ARROW_DEFLECTION_PER_PIECE_DIAMOND = BUILDER.comment("Arrow deflection chance per Diamond Armor piece")
                 .defineInRange("arrowDeflectionPerPieceDiamond", 0.15, 0.0, 1.0);
-                
+
         // Movement speed stats for Leather armor
         LEATHER_SPEED_CAP = BUILDER.comment("Max movement speed bonus for full Leather Armor (e.g., 0.05 for +5%)")
                 .defineInRange("leatherSpeedCap", 0.05, 0.0, 1.0);
@@ -120,6 +132,8 @@ public class AetasFerreaConfig {
         SPIDER_SURFACE_Y = BUILDER.comment("Y-level above which spiders are restricted to certain biomes")
                 .defineInRange("spiderSurfaceYLevel", 60, -64, 320);
         BUILDER.pop();
+        SAFE_ZONE_CHUNK_RADIUS = BUILDER.comment("Radius in chunks (e.g., 3 means 3x3) around world spawn where hostile mobs cannot spawn naturally.")
+                .defineInRange("safeZoneChunkRadius", 3, 0, 100);
 
         BUILDER.push("Economy Tweaks");
         ARMOR_TRADE_MIN_PRICE = BUILDER.comment("Minimum price for armor trades")
@@ -179,6 +193,25 @@ public class AetasFerreaConfig {
                 .defineInRange("wrongToolDurabilityDmg", 24, 0, 1000);
         KNIFE_CHOP_DURABILITY_DMG = BUILDER.comment("Durability damage taken when chopping logs with a knife")
                 .defineInRange("knifeChopDurabilityDmg", 20, 0, 1000);
+        BUILDER.pop();
+
+        BUILDER.push("Wither Tweaks");
+        WITHER_MAX_HEALTH = BUILDER.comment("Maximum health for the Wither (vanilla: 300)")
+                .defineInRange("witherMaxHealth", 200.0, 1.0, 2000.0);
+        WITHER_EXPLOSION_RADIUS = BUILDER.comment("Explosion radius for Wither explosions (creeper: 3.0, TNT: 4.0)")
+                .defineInRange("witherExplosionRadius", 5.0, 1.0, 20.0);
+        WITHER_EXPLOSION_APPLY_WITHER_EFFECT = BUILDER.comment("Whether Wither explosions apply the Wither effect to entities")
+                .define("witherExplosionApplyWitherEffect", false);
+        WITHER_EXPLOSION_DESTROY_BEDROCK_OBSIDIAN = BUILDER.comment("Whether Wither explosions can destroy bedrock and obsidian")
+                .define("witherExplosionDestroyBedrockObsidian", false);
+        WITHER_REGEN_TICKS = BUILDER.comment("Ticks between passive regeneration (vanilla: 20 ticks = 1 second)")
+                .defineInRange("witherRegenTicks", 60, 0, 600);
+        WITHER_HEAL_ON_KILL_AMOUNT = BUILDER.comment("Health healed when Wither kills a target (in HP, vanilla: 10 = 5 hearts)")
+                .defineInRange("witherHealOnKillAmount", 10.0, 0.0, 100.0);
+        WITHER_HEAL_ON_KILL_DURATION = BUILDER.comment("Duration in ticks over which heal-on-kill is applied (vanilla: instant)")
+                .defineInRange("witherHealOnKillDuration", 60, 0, 600);
+        WITHER_ARROW_IMMUNITY = BUILDER.comment("Whether Wither has arrow immunity in phase 2 (below half health)")
+                .define("witherArrowImmunity", false);
         BUILDER.pop();
         SPEC = BUILDER.build();
     }

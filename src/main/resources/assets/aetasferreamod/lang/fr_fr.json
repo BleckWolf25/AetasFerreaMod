@@ -98,5 +98,9 @@
   "tooltip.aetasferreamod.horse.class": "Classe : ",
   "tooltip.aetasferreamod.horse.daily_feeds": "Nourritures Quotidiennes : %d/4",
   "tooltip.aetasferreamod.horse.combat_xp": "Combat XP : %d/125",
-  "tooltip.aetasferreamod.horse.agility_xp": "Agilité XP : %d/150"
+  "tooltip.aetasferreamod.horse.agility_xp": "Agilité XP : %d/150",
+
+  "message.aetasferrea.void_rejects": "Le vide vous rejette. Il exige le catalyseur du Wither.",
+  "message.aetasferrea.void_accepts": "L'Étoile résonne... le vide accepte votre offrande.",
+  "death.attack.aetasferreamod.void_rejection": "%1$s a été rejeté par le vide."
 }

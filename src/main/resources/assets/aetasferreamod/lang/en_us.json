@@ -6,6 +6,8 @@
   "entity.aetasferreamod.aetas_horse": "Horse",
   "entity.aetasferreamod.aetas_donkey": "Donkey",
   "entity.aetasferreamod.aetas_mule": "Mule",
+  "entity.aetasferreamod.monarch": "Hollow Monarch",
+  "entity.aetasferreamod.vanguard": "Aetas Vanguard",
 
   "message.aetasferreamod.system.prefix": "[Aetas Ferrea] ",
   "message.aetasferreamod.system.walk_mode": "Walk Mode: ",
@@ -98,5 +100,9 @@
   "tooltip.aetasferreamod.horse.class": "Class: ",
   "tooltip.aetasferreamod.horse.daily_feeds": "Daily Feeds: %d/4",
   "tooltip.aetasferreamod.horse.combat_xp": "Combat XP: %d/125",
-  "tooltip.aetasferreamod.horse.agility_xp": "Agility XP: %d/150"
+  "tooltip.aetasferreamod.horse.agility_xp": "Agility XP: %d/150",
+
+  "message.aetasferrea.void_rejects": "The void rejects you. It demands the catalyst of the Wither.",
+  "message.aetasferrea.void_accepts": "The Star resonates... the void accepts your offering.",
+  "death.attack.aetasferreamod.void_rejection": "%1$s was rejected from the void."
 }

@@ -2,7 +2,7 @@
  * @file HorseReplacementHandler.java
  *
  * @version 1.0.0
- * @author Bleckwolf25
+ * @author BleckWolf25
  * @license MIT
  *
  * @summary Intercepts vanilla Horse, Donkey, and Mule spawns and replaces them with Aetas Ferrea variants.

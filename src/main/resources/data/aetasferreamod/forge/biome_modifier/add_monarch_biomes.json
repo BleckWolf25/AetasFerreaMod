@@ -1,0 +1,15 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": [
+    "minecraft:basalt_deltas"
+  ],
+  "dimensions": [
+    "minecraft:the_nether"
+  ],
+  "spawners": {
+    "type": "aetasferreamod:monarch",
+    "weight": 3,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

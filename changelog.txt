@@ -2,9 +2,21 @@
  Aetas Ferrea Mod - Changelog
 ================================================================================
 
+Version 1.0.0 [RELEASE]
+============
+- Official stable release of Aetas Ferrea Mod.
+- All features from BETA are now stable and production-ready.
+- Implement configurable safe-chunck spawn that blocks natural mob spawning.
+- Added Vanguard Entity: A new Nether Guardian mini-boss.
+- Added Monarch Entity: A powerful knight boss.
+- Changed Wither to be more balanced.
+- Entering End now requires a nether star.
+- General Improvements, fixes and code cleaning.
+
 Version 1.0.0 [BETA]
 ============
 - Updated status to BETA release.
+- Added gametest structures for horse mechanics and combat testing.
 - Added Equine / Mounted Combat Overhaul:
   - Equine classes: Wild, Rouncey, Destrier, Courser, Palfrey.
   - Realistic riding mechanics: Sigmoidal throttle, walk speed caps, reverse gear, high-speed fall damage.

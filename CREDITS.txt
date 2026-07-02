@@ -4,8 +4,8 @@
 
 Development & Design
 ==============================
-- Lead Developer: Bleckwolf25
-- Mod Architecture: Bleckwolf25
+- Lead Developer: BleckWolf25
+- Mod Architecture: BleckWolf25
 
 Special Thanks & Libraries
 ==============================

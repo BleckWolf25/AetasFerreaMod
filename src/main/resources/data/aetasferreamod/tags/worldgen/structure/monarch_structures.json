@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:fortress",
+    {
+      "id": "medieval_nether:castle",
+      "required": false
+    },
+    {
+      "id": "betterfortresses:fortress",
+      "required": false
+    }
+  ]
+}

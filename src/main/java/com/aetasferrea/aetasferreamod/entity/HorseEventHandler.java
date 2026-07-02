@@ -2,7 +2,7 @@
  * @file HorseEventHandler.java
  *
  * @version 1.0.0
- * @author Bleckwolf25
+ * @author BleckWolf25
  * @license MIT
  *
  * @summary Core custom Horse entity implementing the Aetas Ferrea medieval equine system.
@@ -17,7 +17,6 @@
  * @since 20/05/2026
  * @updated 24/06/2026
  */
-
 // ---------- PACKAGE
 package com.aetasferrea.aetasferreamod.entity;
 
@@ -100,7 +99,7 @@ public class HorseEventHandler extends Horse {
     public boolean isWalkMode() { return this.entityData.get(DATA_WALK_MODE); }
     public void setWalkMode(boolean walkMode) { this.entityData.set(DATA_WALK_MODE, walkMode); }
     public double getThrottle() { return this.throttle; }
-    
+
     public boolean hasChest() { return this.entityData.get(DATA_ID_CHEST); }
     public void setChest(boolean chested) { this.entityData.set(DATA_ID_CHEST, chested); }
 
@@ -146,7 +145,7 @@ public class HorseEventHandler extends Horse {
             if (this.throttle >= 0.55 && !this.isWalkMode() && !this.isInWater()) {
                 float damage = (float) ((this.throttle - 0.4) * 6.0);
                 player.hurt(this.damageSources().fall(), damage);
-                
+
                 net.minecraft.world.phys.Vec3 horseVec = this.getDeltaMovement();
                 player.setDeltaMovement(player.getDeltaMovement().add(horseVec.x * 1.5, 0.2, horseVec.z * 1.5));
                 player.hurtMarked = true;
@@ -162,7 +161,7 @@ public class HorseEventHandler extends Horse {
 
         // Swimming State Detection (runs on BOTH client and server)
         double waterHeight = this.getFluidHeight(net.minecraft.tags.FluidTags.WATER);
-        
+
         if (this.isSwimming) {
             // Stop swimming if water is very shallow, or if can touch the ground in shallow water
             if (waterHeight < 0.3 || (this.onGround() && waterHeight < 0.7)) {
@@ -178,7 +177,7 @@ public class HorseEventHandler extends Horse {
         // Buoyancy (runs on both sides for smooth rendering)
         if (this.isSwimming) {
             net.minecraft.world.phys.Vec3 mot = this.getDeltaMovement();
-            
+
             if (this.getArmor().is(net.minecraft.world.item.Items.IRON_HORSE_ARMOR)) {
                 // Iron Armor causes sinking instead of floating
                 if (mot.y > -0.05) {
@@ -262,7 +261,7 @@ public class HorseEventHandler extends Horse {
                     net.minecraft.world.phys.AABB box = this.getBoundingBox().inflate(1.2, 0.5, 1.2);
                     java.util.List<net.minecraft.world.entity.LivingEntity> nearby = this.level().getEntitiesOfClass(
                         net.minecraft.world.entity.LivingEntity.class, box,
-                        e -> e != this && e != this.getFirstPassenger() 
+                        e -> e != this && e != this.getFirstPassenger()
                             && !(e instanceof net.minecraft.world.entity.TamableAnimal t && t.isTame())
                     );
 
@@ -391,9 +390,9 @@ public class HorseEventHandler extends Horse {
                         this.setHorseClass(CLASS_ROUNCEY);
                         this.applyClassAttributeCaps(CLASS_ROUNCEY);
                         this.heal(this.getMaxHealth());
-                        
+
                         this.level().broadcastEntityEvent(this, (byte) 7);
-                        
+
                         if (player instanceof ServerPlayer sp) {
                             displaySubtitle(sp, Component.translatable("message.aetasferreamod.horse.broken", Component.translatable("entity.aetasferreamod.aetas_horse"), Component.translatable("entity.aetasferreamod.horse.rouncey")).withStyle(ChatFormatting.GREEN));
                         }
@@ -422,7 +421,7 @@ public class HorseEventHandler extends Horse {
                     this.heal(this.getMaxHealth());
                     if (this.level() instanceof ServerLevel sl) sl.sendParticles(ParticleTypes.FLAME, this.getX(), this.getY() + 1.5, this.getZ(), 5, 0.5, 0.5, 0.5, 0.0);
                     this.level().playSound(null, this.blockPosition(), SoundEvents.ANVIL_USE, SoundSource.NEUTRAL, 1.0f, 1.0f);
-                    
+
                     if (player instanceof ServerPlayer sp) {
                         displaySubtitle(sp, Component.translatable("message.aetasferreamod.horse.destrier_success", Component.translatable("entity.aetasferreamod.horse.rouncey")).withStyle(ChatFormatting.GOLD));
                     }
@@ -451,7 +450,7 @@ public class HorseEventHandler extends Horse {
                         this.heal(this.getMaxHealth());
                         if (this.level() instanceof ServerLevel sl) sl.sendParticles(ParticleTypes.CLOUD, this.getX(), this.getY() + 1.5,this.getZ(), 5, 0.5, 0.5, 0.5, 0.0);
                         this.level().playSound(null, this.blockPosition(), SoundEvents.HORSE_BREATHE, SoundSource.NEUTRAL, 1.0f, 1.0f);
-                        
+
                         if (player instanceof ServerPlayer sp) {
                             displaySubtitle(sp, Component.translatable("message.aetasferreamod.horse.courser_success", Component.translatable("entity.aetasferreamod.horse.rouncey")).withStyle(ChatFormatting.AQUA));
                         }
@@ -473,7 +472,7 @@ public class HorseEventHandler extends Horse {
                 this.heal(this.getMaxHealth());
                 if (this.level() instanceof ServerLevel sl) sl.sendParticles(ParticleTypes.HAPPY_VILLAGER, this.getX(), this.getY() + 1.5, this.getZ(), 5, 0.5, 0.5, 0.5, 0.0);
                 this.level().playSound(null, this.blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.NEUTRAL, 1.0f, 1.0f);
-                
+
                 if (player instanceof ServerPlayer sp) {
                     displaySubtitle(sp, Component.translatable("message.aetasferreamod.horse.palfrey_success", Component.translatable("entity.aetasferreamod.horse.rouncey")).withStyle(ChatFormatting.GREEN));
                 }
@@ -598,12 +597,12 @@ public class HorseEventHandler extends Horse {
 
     @Override
     public boolean canJump() { return super.canJump() && this.jumpCooldown <= 0 && !this.isSwimming && !this.isInWater(); }
-    
+
     @Override
     public void onPlayerJump(int pJumpPower) {
         if (this.jumpCooldown > 0) return;
         super.onPlayerJump(pJumpPower);
-        this.jumpCooldown = 20; 
+        this.jumpCooldown = 20;
     }
 
     @Override
@@ -759,7 +758,7 @@ public class HorseEventHandler extends Horse {
 
             this.setSpeed(outputSpeed);
             float forward = this.isReversing ? -1.0f : 1.0f;
-            
+
             super.travel(new net.minecraft.world.phys.Vec3(0.0, travelVector.y, forward));
             return;
         }
@@ -791,14 +790,14 @@ public class HorseEventHandler extends Horse {
 
         double throttleRise = 1.0 / riseTimeTicks;
         double coastDecay = throttleRise * 0.4;
-        double brakeDecay = (armor.is(net.minecraft.world.item.Items.IRON_HORSE_ARMOR) && horseClass == CLASS_DESTRIER) 
-            ? throttleRise * 1.2 
+        double brakeDecay = (armor.is(net.minecraft.world.item.Items.IRON_HORSE_ARMOR) && horseClass == CLASS_DESTRIER)
+            ? throttleRise * 1.2
             : throttleRise * 3.0;
 
         float forwardInput = rider.zza;
         boolean isForward = forwardInput > 0.0f;
         boolean isBackward = forwardInput < 0.0f;
-        
+
         if (this.throttle <= 0.01) {
             if (isBackward) {
                 this.isReversing = true;
@@ -810,7 +809,7 @@ public class HorseEventHandler extends Horse {
         double maxThrottle = this.isWalkMode() ? 0.35 : 1.0;
 
         if (this.throttle > maxThrottle) {
-            this.throttle = Math.max(maxThrottle, this.throttle - brakeDecay); 
+            this.throttle = Math.max(maxThrottle, this.throttle - brakeDecay);
         } else if ((isForward && !this.isReversing) || (isBackward && this.isReversing)) {
             this.throttle = Math.min(maxThrottle, this.throttle + throttleRise);
         } else if ((isBackward && !this.isReversing) || (isForward && this.isReversing)) {
@@ -843,7 +842,7 @@ public class HorseEventHandler extends Horse {
     @Override
     protected float getRiddenSpeed(net.minecraft.world.entity.player.Player rider) {
         double baseSpeed = this.getAttributeValue(Attributes.MOVEMENT_SPEED);
-        
+
         double sigmoid = 1.0 / (1.0 + Math.exp(-(this.throttle * 12.0 - 6.0)));
         if (this.throttle <= 0.01) sigmoid = 0.0;
 

@@ -2,7 +2,7 @@
  * @file AetasMule.java
  *
  * @version 1.0.0
- * @author Bleckwolf25
+ * @author BleckWolf25
  * @license MIT
  *
  * @summary Custom Mule entity with Aetas Ferrea equine mechanics.
@@ -58,7 +58,7 @@ public class AetasMule extends Mule {
     private double throttle = 0.0;
     private int jumpCooldown = 0;
     private boolean isReversing = false;
-    
+
     private boolean isSwimming = false;
     private boolean wasSwimming = false;
     private int swimTicks = 0;
@@ -77,7 +77,7 @@ public class AetasMule extends Mule {
     public boolean isWalkMode() { return this.entityData.get(DATA_WALK_MODE); }
     public void setWalkMode(boolean walkMode) { this.entityData.set(DATA_WALK_MODE, walkMode); }
     public double getThrottle() { return this.throttle; }
-    
+
     public void rerollStats(@Nonnull net.minecraft.util.RandomSource random) {
         AttributeInstance speed = this.getAttribute(Objects.requireNonNull(Attributes.MOVEMENT_SPEED));
         if (speed != null) speed.setBaseValue(0.19 + random.nextDouble() * (0.20 - 0.19));
@@ -225,7 +225,7 @@ public class AetasMule extends Mule {
     @Override
     public InteractionResult mobInteract(@Nonnull Player player, @Nonnull InteractionHand hand) {
         @Nonnull ItemStack itemstack = Objects.requireNonNull(player.getItemInHand(hand));
-        
+
         // Let vanilla handle baby feeding and growth
         if (this.isBaby() && this.isFood(itemstack)) {
             return super.mobInteract(player, hand);
@@ -286,7 +286,7 @@ public class AetasMule extends Mule {
 
     @Override
     public boolean canJump() { return super.canJump() && this.jumpCooldown <= 0 && !this.isSwimming && !this.isInWater(); }
-    
+
     @Override
     public void onPlayerJump(int pJumpPower) {
         if (this.jumpCooldown > 0) return;
@@ -322,7 +322,7 @@ public class AetasMule extends Mule {
 
         if (this.isSwimming) {
             this.isReversing = false;
-            this.throttle = 0.35; 
+            this.throttle = 0.35;
             return;
         }
 
@@ -334,7 +334,7 @@ public class AetasMule extends Mule {
         float forwardInput = rider.zza;
         boolean isForward = forwardInput > 0.0f;
         boolean isBackward = forwardInput < 0.0f;
-        
+
         if (this.throttle <= 0.01) {
             if (isBackward) this.isReversing = true;
             else if (isForward) this.isReversing = false;
@@ -343,7 +343,7 @@ public class AetasMule extends Mule {
         double maxThrottle = this.isWalkMode() ? 0.40 : 1.0;
 
         if (this.throttle > maxThrottle) {
-            this.throttle = Math.max(maxThrottle, this.throttle - brakeDecay); 
+            this.throttle = Math.max(maxThrottle, this.throttle - brakeDecay);
         } else if ((isForward && !this.isReversing) || (isBackward && this.isReversing)) {
             this.throttle = Math.min(maxThrottle, this.throttle + throttleRise);
         } else if ((isBackward && !this.isReversing) || (isForward && this.isReversing)) {

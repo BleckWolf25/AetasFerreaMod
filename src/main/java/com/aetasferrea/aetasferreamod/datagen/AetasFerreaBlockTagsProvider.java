@@ -2,7 +2,7 @@
  * @file AetasFerreaBlockTagsProvider.java
  *
  * @version 1.0.0
- * @author Bleckwolf25
+ * @author BleckWolf25
  * @license MIT
  *
  * @summary Defines custom block tags for world interactions and tool requirements.

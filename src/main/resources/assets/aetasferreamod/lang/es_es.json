@@ -98,5 +98,9 @@
   "tooltip.aetasferreamod.horse.class": "Clase: ",
   "tooltip.aetasferreamod.horse.daily_feeds": "Comidas Diarias: %d/4",
   "tooltip.aetasferreamod.horse.combat_xp": "XP de Combate: %d/125",
-  "tooltip.aetasferreamod.horse.agility_xp": "XP de Agilidad: %d/150"
+  "tooltip.aetasferreamod.horse.agility_xp": "XP de Agilidad: %d/150",
+
+  "message.aetasferrea.void_rejects": "El vacío te rechaza. Exige el catalizador del Wither.",
+  "message.aetasferrea.void_accepts": "La Estrella resuena... el vacío acepta tu ofrenda.",
+  "death.attack.aetasferreamod.void_rejection": "%1$s fue rechazado por el vacío."
 }

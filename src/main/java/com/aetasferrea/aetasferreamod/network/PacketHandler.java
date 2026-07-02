@@ -2,7 +2,7 @@
  * @file PacketHandler.java
  *
  * @version 1.0.0
- * @author Bleckwolf25
+ * @author BleckWolf25
  * @license MIT
  *
  * @summary Registers and exposes the mod's SimpleChannel network instance.
@@ -12,7 +12,7 @@
  * all packet types with their encoder, decoder, and handler bindings.
  *
  * @since 20/05/2026
- * @updated 25/06/2026
+ * @updated 01/07/2026
  */
 // ---------- PACKAGE
 package com.aetasferrea.aetasferreamod.network;
@@ -31,6 +31,7 @@ public class PacketHandler {
     private static final String PROTOCOL_VERSION = "1";
 
     // Shared channel instance used by all packet send calls throughout the mod
+    @SuppressWarnings("removal")
     public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(
             new ResourceLocation(AetasFerreaMod.MODID, "main"),
             () -> PROTOCOL_VERSION,
