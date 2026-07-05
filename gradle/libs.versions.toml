@@ -10,7 +10,7 @@ searchables = "1.0.2"
 clothConfig = "11.1.106"
 playerAnim = "1.0.2-rc1+1.20"
 insanelib = "Cb8uJKVh"
-junit = "5.9.2"
+junit = "6.1.1"
 mockito = "5.3.1"
 pehkui = "3.8.2+1.20.1-forge"
 
