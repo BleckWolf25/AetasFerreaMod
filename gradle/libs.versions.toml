@@ -12,7 +12,7 @@ playerAnim = "1.0.2-rc1+1.20"
 insanelib = "Cb8uJKVh"
 junit = "5.9.2"
 mockito = "5.3.1"
-pehkui = "3.8.2+1.20.1-forge"
+pehkui = "3.8.3+"
 
 [libraries]
 jade = { module = "curse.maven:jade-324717", version.ref = "jade" }
